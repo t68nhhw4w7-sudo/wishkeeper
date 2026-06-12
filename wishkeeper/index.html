@@ -694,7 +694,7 @@
 </section>
 
 <!-- ── EDIT PROFILE MODAL ── -->
-<div id="editProfileModal" style="display:none;position:fixed;inset:0;background:rgba(26,10,18,0.55);z-index:1000;overflow-y:auto;padding:2rem 1rem">
+<div id="editProfileModal" style="display:none;position:fixed;inset:0;background:rgba(26,10,18,0.55);z-index:1000;overflow-y:auto;padding:2rem 1rem;pointer-events:none">
   <div style="background:var(--white);border-radius:16px;max-width:680px;margin:0 auto;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--white);z-index:10">
       <h3 style="font-size:18px;font-family:'Playfair Display',serif">Edit my profile</h3>
@@ -1046,12 +1046,16 @@ let wishes = [
 let wFilter = 'all';
 
 function openEditProfile() {
-  document.getElementById('editProfileModal').style.display = 'block';
+  const m = document.getElementById('editProfileModal');
+  m.style.display = 'block';
+  m.style.pointerEvents = 'auto';
   document.body.style.overflow = 'hidden';
 }
 
 function closeEditProfile() {
-  document.getElementById('editProfileModal').style.display = 'none';
+  const m = document.getElementById('editProfileModal');
+  m.style.display = 'none';
+  m.style.pointerEvents = 'none';
   document.body.style.overflow = '';
 }
 
