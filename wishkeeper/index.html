@@ -633,34 +633,37 @@
 <section class="page" id="page-profile">
   <div class="page-header">
     <div><h2>My celebration profile</h2><p>Everything your family needs to celebrate you perfectly</p></div>
-    <button class="btn btn-primary btn-sm">✏️ Edit profile</button>
+    <button class="btn btn-primary btn-sm" onclick="openEditProfile()">✏️ Edit profile</button>
   </div>
 
   <div class="grid2" style="margin-bottom:0">
     <div>
       <div class="group-label">Personal details</div>
       <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
-        <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem"><span style="font-size:11px;color:var(--text-muted)">Birthday</span><div style="font-size:13px;font-weight:500;color:var(--text)">July 28 · turning 50</div></div>
-        <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem"><span style="font-size:11px;color:var(--text-muted)">Anniversary</span><div style="font-size:13px;font-weight:500;color:var(--text)">September 12</div></div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem"><span style="font-size:11px;color:var(--text-muted)">Birthday</span><div id="pf-birthday" style="font-size:13px;font-weight:500;color:var(--text)">July 28 · turning 50</div></div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem"><span style="font-size:11px;color:var(--text-muted)">Anniversary</span><div id="pf-anniversary" style="font-size:13px;font-weight:500;color:var(--text)">September 12</div></div>
       </div>
       <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem">
         <div style="font-size:11px;color:var(--text-muted);margin-bottom:.35rem">Clothing sizes</div>
         <div style="display:flex;gap:.75rem;font-size:13px">
-          <span><strong>Top:</strong> M</span>
-          <span><strong>Dress:</strong> 8</span>
-          <span><strong>Shoes:</strong> 8.5</span>
+          <span><strong>Top:</strong> <span id="pf-top">M</span></span>
+          <span><strong>Dress:</strong> <span id="pf-dress">8</span></span>
+          <span><strong>Shoes:</strong> <span id="pf-shoes">8.5</span></span>
         </div>
       </div>
-      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Jewelry preferences</div><div style="font-size:13px;color:var(--text)">Gold only · delicate layering pieces · no statement earrings</div></div>
-      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Home décor style</div><div style="font-size:13px;color:var(--text)">Mediterranean · warm neutrals · lots of plants</div></div>
-      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Favorite flowers</div><div style="font-size:13px;color:var(--text)">Peonies · garden roses · jasmine</div></div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Jewelry preferences</div><div id="pf-jewelry" style="font-size:13px;color:var(--text)">Gold only · delicate layering pieces · no statement earrings</div></div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Home décor style</div><div id="pf-decor" style="font-size:13px;color:var(--text)">Mediterranean · warm neutrals · lots of plants</div></div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Favorite flowers</div><div id="pf-flowers" style="font-size:13px;color:var(--text)">Peonies · garden roses · jasmine</div></div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Dietary preferences</div><div id="pf-dietary" style="font-size:13px;color:var(--text)">Mediterranean diet · no shellfish</div></div>
     </div>
     <div>
       <div class="group-label">Celebration wishes</div>
-      <div class="section-card" style="border-left-color:var(--berry)"><div class="sc-header"><span class="sc-emoji">🎂</span><span class="sc-title" style="color:var(--berry)">Birthday Vision Board</span></div><div class="sc-value">Intimate garden party with close family and friends. Mediterranean food, jazz music, dusty rose and sage colors, fairy lights everywhere.</div></div>
-      <div class="section-card" style="border-left-color:var(--rose)"><div class="sc-header"><span class="sc-emoji">💍</span><span class="sc-title" style="color:var(--rose)">Anniversary Dreams</span></div><div class="sc-value">Overnight at a boutique hotel in Virginia wine country. Italian dinner, couples spa, no phones.</div></div>
-      <div class="section-card" style="border-left-color:var(--teal)"><div class="sc-header"><span class="sc-emoji">🌙</span><span class="sc-title" style="color:var(--teal)">Eid Traditions</span></div><div class="sc-value">Full family at our home — all three generations. Matching outfits in earth tones. Mama's biryani, konafa for dessert. Eid envelopes for the children.</div></div>
-      <div class="section-card" style="border-left-color:#C89B5A"><div class="sc-header"><span class="sc-emoji">🌸</span><span class="sc-title" style="color:#7A5C1E">Mother's Day Wishes</span></div><div class="sc-value">Breakfast made by the family. A walk in the park. Peonies please — not roses. No need for expensive gifts, just your presence.</div></div>
+      <div class="section-card" style="border-left-color:var(--berry)"><div class="sc-header"><span class="sc-emoji">🎂</span><span class="sc-title" style="color:var(--berry)">Birthday Vision Board</span></div><div id="pf-birthday-wish" class="sc-value">Intimate garden party with close family and friends. Mediterranean food, jazz music, dusty rose and sage colors, fairy lights everywhere.</div></div>
+      <div class="section-card" style="border-left-color:var(--rose)"><div class="sc-header"><span class="sc-emoji">💍</span><span class="sc-title" style="color:var(--rose)">Anniversary Dreams</span></div><div id="pf-anniversary-wish" class="sc-value">Overnight at a boutique hotel in Virginia wine country. Italian dinner, couples spa, no phones.</div></div>
+      <div class="section-card" style="border-left-color:var(--teal)"><div class="sc-header"><span class="sc-emoji">🌙</span><span class="sc-title" style="color:var(--teal)">Eid Traditions</span></div><div id="pf-eid" class="sc-value">Full family at our home — all three generations. Matching outfits in earth tones. Mama's biryani, konafa for dessert. Eid envelopes for the children.</div></div>
+      <div class="section-card" style="border-left-color:#C89B5A"><div class="sc-header"><span class="sc-emoji">🌸</span><span class="sc-title" style="color:#7A5C1E">Mother's Day Wishes</span></div><div id="pf-mothersday" class="sc-value">Breakfast made by the family. A walk in the park. Peonies please — not roses. No need for expensive gifts, just your presence.</div></div>
+      <div class="section-card" style="border-left-color:var(--purple)"><div class="sc-header"><span class="sc-emoji">✈️</span><span class="sc-title" style="color:var(--purple)">Travel & Bucket List</span></div><div id="pf-travel" class="sc-value">Amalfi Coast, Japan, Morocco. Dream: a cooking class in Italy and a safari in Kenya.</div></div>
+      <div class="section-card" style="border-left-color:var(--gold)"><div class="sc-header"><span class="sc-emoji">❤️</span><span class="sc-title" style="color:#7A5C1E">My Favorites</span></div><div id="pf-favorites" class="sc-value">Peonies, jazz music, Mediterranean food, gold jewelry, garden settings, hot tea in the morning, long walks.</div></div>
     </div>
   </div>
 
@@ -679,16 +682,92 @@
 
   <div class="card" style="border-left:3px solid var(--rose)">
     <div class="card-header"><span class="card-title">👵 What I want my family to know</span><span class="badge bg">🔒 Private until shared</span></div>
-    <div style="font-size:13px;color:var(--text-mid);font-style:italic;line-height:1.7">"The most important thing to me isn't the gifts — it's that you show up. Cook for me, sit with me, tell me what I mean to you. That is my celebration."</div>
+    <div id="pf-family-msg" style="font-size:13px;color:var(--text-mid);font-style:italic;line-height:1.7">"The most important thing to me isn't the gifts — it's that you show up. Cook for me, sit with me, tell me what I mean to you. That is my celebration."</div>
   </div>
 
   <div class="group-label">Charities I'd love donations to</div>
-  <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+  <div id="pf-charities" style="display:flex;flex-wrap:wrap;gap:.5rem">
     <span class="badge bt" style="padding:5px 13px;font-size:12px">❤️ UNICEF</span>
     <span class="badge bt" style="padding:5px 13px;font-size:12px">❤️ Local food bank</span>
     <span class="badge bt" style="padding:5px 13px;font-size:12px">❤️ Women's shelter</span>
   </div>
 </section>
+
+<!-- ── EDIT PROFILE MODAL ── -->
+<div id="editProfileModal" style="display:none;position:fixed;inset:0;background:rgba(26,10,18,0.55);z-index:1000;overflow-y:auto;padding:2rem 1rem">
+  <div style="background:var(--white);border-radius:16px;max-width:680px;margin:0 auto;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--white);z-index:10">
+      <h3 style="font-size:18px;font-family:'Playfair Display',serif">Edit my profile</h3>
+      <div style="display:flex;gap:.6rem">
+        <button class="btn btn-sm" onclick="closeEditProfile()">Cancel</button>
+        <button class="btn btn-primary btn-sm" onclick="saveProfile()">Save changes</button>
+      </div>
+    </div>
+    <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem">
+
+      <!-- Personal -->
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">Personal details</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem">
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Your name</label><input id="ep-name" value="Sarah Ahmed"></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Birthday</label><input id="ep-birthday" value="July 28 · turning 50"></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Anniversary</label><input id="ep-anniversary" value="September 12"></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Dietary preferences</label><input id="ep-dietary" value="Mediterranean diet · no shellfish"></div>
+        </div>
+      </div>
+
+      <!-- Sizes -->
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">Clothing sizes</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.65rem">
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Top</label><input id="ep-top" value="M"></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Dress</label><input id="ep-dress" value="8"></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Shoes</label><input id="ep-shoes" value="8.5"></div>
+        </div>
+      </div>
+
+      <!-- Preferences -->
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">Personal preferences</div>
+        <div style="display:flex;flex-direction:column;gap:.65rem">
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">💍 Jewelry preferences</label><input id="ep-jewelry" value="Gold only · delicate layering pieces · no statement earrings"></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">🏠 Home décor style</label><input id="ep-decor" value="Mediterranean · warm neutrals · lots of plants"></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">🌸 Favorite flowers</label><input id="ep-flowers" value="Peonies · garden roses · jasmine"></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">❤️ My favorites (things that make you happy)</label><textarea id="ep-favorites" rows="2">Peonies, jazz music, Mediterranean food, gold jewelry, garden settings, hot tea in the morning, long walks.</textarea></div>
+        </div>
+      </div>
+
+      <!-- Celebration wishes -->
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">Celebration wishes</div>
+        <div style="display:flex;flex-direction:column;gap:.65rem">
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">🎂 Birthday wishes — describe your dream birthday</label><textarea id="ep-birthday-wish" rows="3">Intimate garden party with close family and friends. Mediterranean food, jazz music, dusty rose and sage colors, fairy lights everywhere.</textarea></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">💍 Anniversary dreams</label><textarea id="ep-anniversary-wish" rows="2">Overnight at a boutique hotel in Virginia wine country. Italian dinner, couples spa, no phones.</textarea></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">🌸 Mother's Day wishes</label><textarea id="ep-mothersday" rows="2">Breakfast made by the family. A walk in the park. Peonies please — not roses. No need for expensive gifts, just your presence.</textarea></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">🌙 Eid / holiday traditions & ideas</label><textarea id="ep-eid" rows="3">Full family at our home — all three generations. Matching outfits in earth tones. Mama's biryani, konafa for dessert. Eid envelopes for the children.</textarea></div>
+          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">✈️ Bucket-list experiences & travel destinations</label><textarea id="ep-travel" rows="2">Amalfi Coast, Japan, Morocco. Dream: a cooking class in Italy and a safari in Kenya.</textarea></div>
+        </div>
+      </div>
+
+      <!-- Charities -->
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">Charities I'd love donations to</div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Comma-separated list</label><input id="ep-charities" value="UNICEF, Local food bank, Women's shelter"></div>
+      </div>
+
+      <!-- Family message -->
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">👵 What I want my family to know</div>
+        <textarea id="ep-family-msg" rows="3">The most important thing to me isn't the gifts — it's that you show up. Cook for me, sit with me, tell me what I mean to you. That is my celebration.</textarea>
+      </div>
+
+      <div style="display:flex;gap:.6rem;justify-content:flex-end;padding-top:.5rem">
+        <button class="btn" onclick="closeEditProfile()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveProfile()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ── WISH LISTS ── -->
 <section class="page" id="page-wishes">
@@ -966,7 +1045,69 @@ let wishes = [
 ];
 let wFilter = 'all';
 
-function renderWishes() {
+function openEditProfile() {
+  document.getElementById('editProfileModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditProfile() {
+  document.getElementById('editProfileModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function saveProfile() {
+  // Personal details
+  document.getElementById('pf-birthday').textContent = document.getElementById('ep-birthday').value;
+  document.getElementById('pf-anniversary').textContent = document.getElementById('ep-anniversary').value;
+  document.getElementById('pf-top').textContent = document.getElementById('ep-top').value;
+  document.getElementById('pf-dress').textContent = document.getElementById('ep-dress').value;
+  document.getElementById('pf-shoes').textContent = document.getElementById('ep-shoes').value;
+  document.getElementById('pf-jewelry').textContent = document.getElementById('ep-jewelry').value;
+  document.getElementById('pf-decor').textContent = document.getElementById('ep-decor').value;
+  document.getElementById('pf-flowers').textContent = document.getElementById('ep-flowers').value;
+  document.getElementById('pf-dietary').textContent = document.getElementById('ep-dietary').value;
+  document.getElementById('pf-favorites').textContent = document.getElementById('ep-favorites').value;
+
+  // Celebration wishes
+  document.getElementById('pf-birthday-wish').textContent = document.getElementById('ep-birthday-wish').value;
+  document.getElementById('pf-anniversary-wish').textContent = document.getElementById('ep-anniversary-wish').value;
+  document.getElementById('pf-mothersday').textContent = document.getElementById('ep-mothersday').value;
+  document.getElementById('pf-eid').textContent = document.getElementById('ep-eid').value;
+  document.getElementById('pf-travel').textContent = document.getElementById('ep-travel').value;
+
+  // Family message
+  document.getElementById('pf-family-msg').textContent = '"' + document.getElementById('ep-family-msg').value + '"';
+
+  // Charities
+  const charities = document.getElementById('ep-charities').value
+    .split(',').map(c => c.trim()).filter(Boolean);
+  document.getElementById('pf-charities').innerHTML = charities
+    .map(c => `<span class="badge bt" style="padding:5px 13px;font-size:12px">❤️ ${c}</span>`)
+    .join('');
+
+  // Update dashboard greeting name
+  const name = document.getElementById('ep-name').value.split(' ')[0];
+  const greet = document.querySelector('#page-dash h2');
+  if (greet) greet.textContent = `Welcome back, ${name} ✨`;
+
+  // Update sidebar footer name
+  const footerName = document.querySelector('.sidebar-footer-name');
+  if (footerName) footerName.textContent = document.getElementById('ep-name').value;
+
+  closeEditProfile();
+
+  // Flash a saved confirmation
+  const btn = document.querySelector('#page-profile .btn-primary');
+  if (btn) { btn.textContent = '✓ Saved!'; setTimeout(() => btn.textContent = '✏️ Edit profile', 2000); }
+}
+
+// Close modal if clicking outside it
+document.addEventListener('click', function(e) {
+  const modal = document.getElementById('editProfileModal');
+  if (e.target === modal) closeEditProfile();
+});
+
+
   const el = document.getElementById('wishList');
   const list = wFilter === 'all' ? wishes : wishes.filter(w => w.cat === wFilter);
   if (!list.length) { el.innerHTML = '<div style="text-align:center;padding:1.5rem;color:#9A8090;font-size:13px;font-style:italic">No wishes in this category yet</div>'; return; }
