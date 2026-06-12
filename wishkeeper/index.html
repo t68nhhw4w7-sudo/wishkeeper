@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WishKeeper — Your Celebration Hub</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --berry: #6D2E46;
+    --berry-mid: #8B3A58;
+    --berry-light: #F5EAF0;
+    --rose: #D4537E;
+    --rose-light: #FBEAF0;
+    --cream: #FAF7F4;
+    --gold: #C89B5A;
+    --teal: #1D9E75;
+    --teal-light: #E1F5EE;
+    --purple: #534AB7;
+    --purple-light: #EEEDFE;
+    --amber-light: #FAEEDA;
+    --coral-light: #FAECE7;
+    --text: #1A0A12;
+    --text-mid: #5A4550;
+    --text-muted: #9A8090;
+    --border: rgba(109,46,70,0.12);
+    --border-hover: rgba(109,46,70,0.25);
+    --white: #FFFFFF;
+    --sidebar-w: 230px;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  h1,h2,h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+
+  /* ── Layout ── */
+  .shell { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--berry);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .logo {
+    padding: 1.5rem 1.25rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .logo h1 {
+    font-size: 22px;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+  .logo-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 2px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .nav { padding: .75rem 0; flex: 1; }
+  .nav-section { margin-bottom: .25rem; }
+  .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: .5rem 1.25rem .3rem;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: .52rem 1.1rem;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 0 .5rem;
+    transition: background .15s, color .15s;
+    border: none;
+    background: none;
+    width: calc(100% - 1rem);
+    text-align: left;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-item.active { background: rgba(255,255,255,0.18); color: #fff; font-weight: 500; }
+  .nav-item .icon { font-size: 16px; flex-shrink: 0; }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--rose);
+    color: #fff;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .sidebar-footer {
+    padding: 1rem 1.1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .sidebar-footer-name { font-size: 12px; font-weight: 500; color: #fff; }
+  .sidebar-footer-plan { font-size: 10px; color: rgba(255,255,255,0.5); }
+
+  /* ── Main content ── */
+  .main { flex: 1; padding: 2rem 2rem 3rem; min-width: 0; max-width: 900px; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.75rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .page-header h2 { font-size: 26px; color: var(--text); line-height: 1.2; }
+  .page-header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: .85rem;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .85rem;
+  }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text); }
+
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: .85rem; margin-bottom: .85rem; }
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .75rem; margin-bottom: .85rem; }
+  .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: .75rem; margin-bottom: 1.25rem; }
+
+  /* ── Stat cards ── */
+  .stat {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    text-align: center;
+  }
+  .stat-n { font-size: 26px; font-weight: 700; color: var(--berry); font-family: 'Playfair Display', serif; }
+  .stat-l { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: .42rem .9rem;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border-hover);
+    background: transparent;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    transition: background .15s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--berry-light); }
+  .btn-primary { background: var(--berry); border-color: var(--berry); color: #fff; }
+  .btn-primary:hover { background: var(--berry-mid); }
+  .btn-sm { padding: .3rem .7rem; font-size: 11px; }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .bp { background: var(--purple-light); color: #3C3489; }
+  .bt { background: var(--teal-light); color: #0F6E56; }
+  .bpk { background: var(--rose-light); color: #72243E; }
+  .ba { background: var(--amber-light); color: #633806; }
+  .bc { background: var(--coral-light); color: #712B13; }
+  .bg { background: #F1EFE8; color: #5F5E5A; }
+  .bgold { background: #FBF3E3; color: #7A5C1E; }
+
+  /* ── Item rows ── */
+  .item-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: .65rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .item-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .item-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .item-meta { flex: 1; min-width: 0; }
+  .item-title { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .priority-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .dot-h { background: var(--rose); }
+  .dot-m { background: var(--gold); }
+  .dot-l { background: var(--teal); }
+
+  /* ── Progress bar ── */
+  .prog-bg { height: 4px; background: var(--berry-light); border-radius: 2px; margin-top: .6rem; }
+  .prog-fill { height: 4px; border-radius: 2px; background: var(--berry); }
+
+  /* ── Tab bar ── */
+  .tab-bar {
+    display: flex;
+    gap: .2rem;
+    padding: .2rem;
+    background: var(--berry-light);
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .tab {
+    padding: .3rem .7rem;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all .15s;
+    border: none;
+    background: none;
+    font-family: 'Inter', sans-serif;
+  }
+  .tab.on { background: var(--white); color: var(--text); font-weight: 500; }
+
+  /* ── Profile sections ── */
+  .section-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--berry);
+    border-radius: var(--radius-sm);
+    padding: .85rem 1rem;
+    margin-bottom: .6rem;
+  }
+  .sc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .sc-emoji { font-size: 17px; }
+  .sc-title { font-size: 13px; font-weight: 600; }
+  .sc-value { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+  .sc-empty { font-size: 12px; color: #c9b0b8; font-style: italic; }
+
+  /* ── Event vision board ── */
+  .vision-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: .6rem; margin-bottom: .75rem; }
+  .vision-card {
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    padding: .75rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: border-color .15s, background .15s;
+  }
+  .vision-card:hover { background: var(--white); border-color: var(--border-hover); }
+  .vc-icon { font-size: 19px; margin-bottom: .35rem; }
+  .vc-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 2px; }
+  .vc-val { font-size: 12px; color: var(--text); line-height: 1.4; }
+
+  /* ── Memory vault ── */
+  .mem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .75rem; }
+  .mem-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .9rem;
+    cursor: pointer;
+    transition: border-color .15s;
+  }
+  .mem-card:hover { border-color: var(--border-hover); }
+  .mem-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 19px; margin-bottom: .6rem; }
+  .mem-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .mem-sub { font-size: 11px; color: var(--text-muted); }
+
+  /* ── Family rows ── */
+  .fm-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: .6rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .fm-row:last-child { border-bottom: none; }
+  .fm-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .fm-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .fm-role { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+  /* ── Gift tracker ── */
+  .gift-row { display: flex; align-items: center; gap: 10px; padding: .58rem 0; border-bottom: 1px solid var(--border); }
+  .gift-row:last-child { border-bottom: none; }
+  .check-box {
+    width: 19px;
+    height: 19px;
+    border-radius: 5px;
+    border: 1.5px solid var(--border-hover);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all .15s;
+    font-size: 11px;
+  }
+  .check-box.done { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+  /* ── Reminders ── */
+  .rem-row { display: flex; align-items: center; gap: 10px; padding: .6rem 0; border-bottom: 1px solid var(--border); }
+  .rem-row:last-child { border-bottom: none; }
+  .rem-date {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background: var(--purple-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .rem-mo { font-size: 9px; font-weight: 600; color: var(--purple); text-transform: uppercase; }
+  .rem-day { font-size: 19px; font-weight: 700; color: #26215C; line-height: 1.1; font-family: 'Playfair Display', serif; }
+
+  .toggle {
+    width: 34px;
+    height: 20px;
+    border-radius: 10px;
+    background: #e0d8dc;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background .2s;
+    border: none;
+  }
+  .toggle.on { background: var(--berry); }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: left .2s;
+  }
+  .toggle.on::after { left: 17px; }
+
+  /* ── AI chips ── */
+  .ai-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: .38rem .8rem;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    cursor: pointer;
+    margin: .2rem .2rem 0 0;
+    transition: all .15s;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+  }
+  .ai-chip:hover { border-color: var(--berry); color: var(--berry); background: var(--berry-light); }
+
+  /* ── AI bubble ── */
+  .ai-bubble {
+    background: var(--purple-light);
+    border-radius: var(--radius);
+    padding: .9rem 1.1rem;
+    margin-bottom: .75rem;
+    font-size: 13px;
+    color: #26215C;
+    line-height: 1.65;
+  }
+  .ai-bubble-header { display: flex; align-items: center; gap: 7px; margin-bottom: .45rem; font-size: 12px; font-weight: 600; color: #3C3489; }
+
+  /* ── Add wish form ── */
+  .add-form {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+    margin-bottom: .85rem;
+    display: none;
+  }
+  .add-form.open { display: block; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-bottom: .6rem; }
+  .form-row.full { grid-template-columns: 1fr; }
+  input, select, textarea {
+    width: 100%;
+    padding: .48rem .75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-hover);
+    background: var(--cream);
+    color: var(--text);
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color .15s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--berry); }
+  textarea { resize: vertical; min-height: 70px; }
+
+  /* ── Section heading ── */
+  .group-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin: .85rem 0 .5rem;
+  }
+
+  /* ── Dashed add card ── */
+  .add-card {
+    border: 1.5px dashed var(--border-hover);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    cursor: pointer;
+    transition: border-color .15s;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  .add-card:hover { border-color: var(--berry); }
+  .add-card-icon { font-size: 26px; color: var(--text-muted); margin-bottom: .4rem; }
+  .add-card-label { font-size: 13px; color: var(--text-muted); }
+  .add-card-sub { font-size: 11px; color: #c9b0b8; margin-top: 3px; }
+
+  /* ── Responsiveness ── */
+  @media(max-width: 700px) {
+    .sidebar { display: none; }
+    .main { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="logo">
+    <h1>WishKeeper</h1>
+    <div class="logo-sub">Your celebration hub</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">
+      <div class="nav-label">My space</div>
+      <button class="nav-item active" onclick="goTo(this,'dash')"><span class="icon">🏠</span> Dashboard</button>
+      <button class="nav-item" onclick="goTo(this,'profile')"><span class="icon">👤</span> My Profile</button>
+      <button class="nav-item" onclick="goTo(this,'wishes')"><span class="icon">🎁</span> Wish Lists</button>
+      <button class="nav-item" onclick="goTo(this,'events')"><span class="icon">🎂</span> Event Boards</button>
+      <button class="nav-item" onclick="goTo(this,'memories')"><span class="icon">📸</span> Memory Vault</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Family</div>
+      <button class="nav-item" onclick="goTo(this,'family')"><span class="icon">👨‍👩‍👧</span> Family Access</button>
+      <button class="nav-item" onclick="goTo(this,'gifts')"><span class="icon">🛍️</span> Gift Tracker <span class="nav-badge">3</span></button>
+      <button class="nav-item" onclick="goTo(this,'reminders')"><span class="icon">🔔</span> Reminders</button>
+    </div>
+    <div class="nav-section">
+      <button class="nav-item" onclick="goTo(this,'ai')"><span class="icon">✨</span> AI Assistant</button>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="avatar">SA</div>
+    <div>
+      <div class="sidebar-footer-name">Sarah A.</div>
+      <div class="sidebar-footer-plan">Premium plan</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+<!-- ── DASHBOARD ── -->
+<section class="page active" id="page-dash">
+  <div class="page-header">
+    <div>
+      <h2>Welcome back, Sarah ✨</h2>
+      <p>Your 50th birthday is in 47 days — your family is ready to celebrate you</p>
+    </div>
+  </div>
+  <div class="grid4">
+    <div class="stat"><div class="stat-n">24</div><div class="stat-l">Wishes</div></div>
+    <div class="stat"><div class="stat-n">6</div><div class="stat-l">Family members</div></div>
+    <div class="stat"><div class="stat-n">3</div><div class="stat-l">Events planned</div></div>
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">Gifts reserved</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Top wishes right now</span>
+        <button class="btn btn-sm" onclick="goTo(document.querySelector('[onclick*=wishes]'),'wishes')">See all</button>
+      </div>
+      <div class="item-row">
+        <div class="item-icon" style="background:var(--rose-light)">💼</div>
+        <div class="item-meta"><div class="item-title">Louis Vuitton Neverfull tote</div><div class="item-sub">Gifts · $1,500 · lv.com</div></div>
+        <div class="priority-dot dot-h"></div>
+      </div>
+      <div class="item-row">
+        <div class="item-icon" style="background:var(--teal-light)">✈️</div>
+        <div class="item-meta"><div class="item-title">Weekend in Savannah, GA</div><div class="item-sub">Experiences · $400–600</div></div>
+        <div class="priority-dot dot-h"></div>
+      </div>
+      <div class="item-row">
+        <div class="item-icon" style="background:var(--amber-light)">🍽️</div>
+        <div class="item-meta"><div class="item-title">Dinner at Nobu Baltimore</div><div class="item-sub">Restaurants · Michelin-starred</div></div>
+        <div class="priority-dot dot-h"></div>
+      </div>
+      <div class="item-row">
+        <div class="item-icon" style="background:var(--rose-light)">💍</div>
+        <div class="item-meta"><div class="item-title">Gold layering necklace — Mejuri</div><div class="item-sub">Jewelry · $180 · mejuri.com</div></div>
+        <div class="priority-dot dot-m"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Upcoming celebrations</span>
+        <button class="btn btn-sm" onclick="goTo(document.querySelector('[onclick*=events]'),'events')">See all</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.6rem">
+        <div style="padding:.65rem;background:var(--cream);border-radius:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
+            <div style="font-size:13px;font-weight:500">🎂 50th Birthday Party</div>
+            <span class="badge bp">Jul 28</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:.4rem">Garden party · 45 guests</div>
+          <div class="prog-bg"><div class="prog-fill" style="width:65%"></div></div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">65% planned</div>
+        </div>
+        <div style="padding:.65rem;background:var(--cream);border-radius:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
+            <div style="font-size:13px;font-weight:500">💑 25th Anniversary</div>
+            <span class="badge bpk">Sep 12</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:.4rem">Boutique hotel · Italian dinner</div>
+          <div class="prog-bg"><div class="prog-fill" style="width:30%;background:var(--rose)"></div></div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">30% planned</div>
+        </div>
+        <div style="padding:.65rem;background:var(--cream);border-radius:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
+            <div style="font-size:13px;font-weight:500">🌙 Eid al-Adha</div>
+            <span class="badge bt">Jun 6</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:.4rem">Family gathering · Traditional</div>
+          <div class="prog-bg"><div class="prog-fill" style="width:80%;background:var(--teal)"></div></div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">80% planned</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">Quick actions</span></div>
+    <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=profile]'),'profile')">👤 Edit my profile</button>
+      <button class="ai-chip" onclick="openAddWish()">🎁 Add a wish</button>
+      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=events]'),'events')">🎂 Plan an event</button>
+      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=memories]'),'memories')">📸 Add a memory</button>
+      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=family]'),'family')">👨‍👩‍👧 Invite family</button>
+      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=ai]'),'ai')">✨ Get AI gift ideas ↗</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── MY PROFILE ── -->
+<section class="page" id="page-profile">
+  <div class="page-header">
+    <div><h2>My celebration profile</h2><p>Everything your family needs to celebrate you perfectly</p></div>
+    <button class="btn btn-primary btn-sm">✏️ Edit profile</button>
+  </div>
+
+  <div class="grid2" style="margin-bottom:0">
+    <div>
+      <div class="group-label">Personal details</div>
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem"><span style="font-size:11px;color:var(--text-muted)">Birthday</span><div style="font-size:13px;font-weight:500;color:var(--text)">July 28 · turning 50</div></div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem"><span style="font-size:11px;color:var(--text-muted)">Anniversary</span><div style="font-size:13px;font-weight:500;color:var(--text)">September 12</div></div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:.35rem">Clothing sizes</div>
+        <div style="display:flex;gap:.75rem;font-size:13px">
+          <span><strong>Top:</strong> M</span>
+          <span><strong>Dress:</strong> 8</span>
+          <span><strong>Shoes:</strong> 8.5</span>
+        </div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Jewelry preferences</div><div style="font-size:13px;color:var(--text)">Gold only · delicate layering pieces · no statement earrings</div></div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Home décor style</div><div style="font-size:13px;color:var(--text)">Mediterranean · warm neutrals · lots of plants</div></div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Favorite flowers</div><div style="font-size:13px;color:var(--text)">Peonies · garden roses · jasmine</div></div>
+    </div>
+    <div>
+      <div class="group-label">Celebration wishes</div>
+      <div class="section-card" style="border-left-color:var(--berry)"><div class="sc-header"><span class="sc-emoji">🎂</span><span class="sc-title" style="color:var(--berry)">Birthday Vision Board</span></div><div class="sc-value">Intimate garden party with close family and friends. Mediterranean food, jazz music, dusty rose and sage colors, fairy lights everywhere.</div></div>
+      <div class="section-card" style="border-left-color:var(--rose)"><div class="sc-header"><span class="sc-emoji">💍</span><span class="sc-title" style="color:var(--rose)">Anniversary Dreams</span></div><div class="sc-value">Overnight at a boutique hotel in Virginia wine country. Italian dinner, couples spa, no phones.</div></div>
+      <div class="section-card" style="border-left-color:var(--teal)"><div class="sc-header"><span class="sc-emoji">🌙</span><span class="sc-title" style="color:var(--teal)">Eid Traditions</span></div><div class="sc-value">Full family at our home — all three generations. Matching outfits in earth tones. Mama's biryani, konafa for dessert. Eid envelopes for the children.</div></div>
+      <div class="section-card" style="border-left-color:#C89B5A"><div class="sc-header"><span class="sc-emoji">🌸</span><span class="sc-title" style="color:#7A5C1E">Mother's Day Wishes</span></div><div class="sc-value">Breakfast made by the family. A walk in the park. Peonies please — not roses. No need for expensive gifts, just your presence.</div></div>
+    </div>
+  </div>
+
+  <div class="group-label" style="margin-top:1rem">All 9 profile sections</div>
+  <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem">
+    <span class="badge bpk" style="padding:5px 12px;font-size:12px">❤️ My Favorites</span>
+    <span class="badge bp" style="padding:5px 12px;font-size:12px">🎂 Birthday Vision</span>
+    <span class="badge bpk" style="padding:5px 12px;font-size:12px">💍 Anniversary Dreams</span>
+    <span class="badge bt" style="padding:5px 12px;font-size:12px">🌙 Eid Traditions</span>
+    <span class="badge ba" style="padding:5px 12px;font-size:12px">✈️ Travel Wishlist</span>
+    <span class="badge bp" style="padding:5px 12px;font-size:12px">🎁 Gift Wishlist</span>
+    <span class="badge bg" style="padding:5px 12px;font-size:12px">📸 Family Traditions</span>
+    <span class="badge bg" style="padding:5px 12px;font-size:12px">📝 Letters & Memories</span>
+    <span class="badge bpk" style="padding:5px 12px;font-size:12px">👵 What I Want My Family to Know</span>
+  </div>
+
+  <div class="card" style="border-left:3px solid var(--rose)">
+    <div class="card-header"><span class="card-title">👵 What I want my family to know</span><span class="badge bg">🔒 Private until shared</span></div>
+    <div style="font-size:13px;color:var(--text-mid);font-style:italic;line-height:1.7">"The most important thing to me isn't the gifts — it's that you show up. Cook for me, sit with me, tell me what I mean to you. That is my celebration."</div>
+  </div>
+
+  <div class="group-label">Charities I'd love donations to</div>
+  <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+    <span class="badge bt" style="padding:5px 13px;font-size:12px">❤️ UNICEF</span>
+    <span class="badge bt" style="padding:5px 13px;font-size:12px">❤️ Local food bank</span>
+    <span class="badge bt" style="padding:5px 13px;font-size:12px">❤️ Women's shelter</span>
+  </div>
+</section>
+
+<!-- ── WISH LISTS ── -->
+<section class="page" id="page-wishes">
+  <div class="page-header">
+    <div><h2>Wish lists</h2><p>9 categories · each item has photos, links, price, priority, and notes</p></div>
+    <button class="btn btn-primary btn-sm" onclick="openAddWish()">+ Add wish</button>
+  </div>
+
+  <div class="add-form" id="addForm">
+    <div class="form-row full"><input id="wt" placeholder="What do you wish for? (e.g. Weekend spa getaway)"></div>
+    <div class="form-row">
+      <select id="wc">
+        <option>Gifts I Want</option><option>Experiences I'd Love</option><option>Restaurants I'd Like to Try</option><option>Home Items</option><option>Jewelry</option><option>Books</option><option>Acts of Service</option><option>Travel</option><option>Charities</option>
+      </select>
+      <select id="wp"><option value="high">High priority</option><option value="med" selected>Medium</option><option value="low">Low</option></select>
+    </div>
+    <div class="form-row">
+      <input id="wpr" placeholder="Price range (e.g. $50–100)">
+      <input id="wlk" placeholder="Link (optional)">
+    </div>
+    <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.25rem">
+      <button class="btn btn-sm" onclick="closeAddWish()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveWish()">Save wish</button>
+    </div>
+  </div>
+
+  <div class="tab-bar" id="wTabs">
+    <button class="tab on" onclick="filterW(this,'all')">All</button>
+    <button class="tab" onclick="filterW(this,'Gifts I Want')">🎁 Gifts</button>
+    <button class="tab" onclick="filterW(this,`Experiences I'd Love`)">✈️ Experiences</button>
+    <button class="tab" onclick="filterW(this,`Restaurants I'd Like to Try`)">🍽️ Restaurants</button>
+    <button class="tab" onclick="filterW(this,'Home Items')">🏠 Home</button>
+    <button class="tab" onclick="filterW(this,'Jewelry')">💍 Jewelry</button>
+    <button class="tab" onclick="filterW(this,'Books')">📚 Books</button>
+    <button class="tab" onclick="filterW(this,'Acts of Service')">❤️ Acts of Service</button>
+    <button class="tab" onclick="filterW(this,'Travel')">🌍 Travel</button>
+    <button class="tab" onclick="filterW(this,'Charities')">🤝 Charities</button>
+  </div>
+
+  <div class="card" id="wishList"></div>
+</section>
+
+<!-- ── EVENT BOARDS ── -->
+<section class="page" id="page-events">
+  <div class="page-header">
+    <div><h2>Event planning boards</h2><p>Pinterest-style vision boards for every milestone</p></div>
+    <button class="btn btn-primary btn-sm">+ New board</button>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><span class="card-title">🎂 50th Birthday Dream Celebration</span><span class="badge bp">Jul 28</span></div>
+      <div class="vision-grid">
+        <div class="vision-card"><div class="vc-icon">🏛️</div><div class="vc-label">Venue</div><div class="vc-val">Botanical garden or backyard with fairy lights</div></div>
+        <div class="vision-card"><div class="vc-icon">🎨</div><div class="vc-label">Theme</div><div class="vc-val">Garden party · dusty rose · sage · gold</div></div>
+        <div class="vision-card"><div class="vc-icon">👥</div><div class="vc-label">Guest list</div><div class="vc-val">45 close family & dear friends</div></div>
+        <div class="vision-card"><div class="vc-icon">🍽️</div><div class="vc-label">Food</div><div class="vc-val">Mediterranean catering · mezze spread</div></div>
+        <div class="vision-card"><div class="vc-icon">🎵</div><div class="vc-label">Entertainment</div><div class="vc-val">Jazz trio + Polaroid photo booth</div></div>
+        <div class="vision-card"><div class="vc-icon">🎂</div><div class="vc-label">Cake</div><div class="vc-val">3-tier floral · lemon · gold leaf</div></div>
+      </div>
+      <div class="prog-bg"><div class="prog-fill" style="width:65%"></div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">65% planned</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">💑 25th Anniversary Dreams</span><span class="badge bpk">Sep 12</span></div>
+      <div class="vision-grid">
+        <div class="vision-card"><div class="vc-icon">🏨</div><div class="vc-label">Setting</div><div class="vc-val">Boutique hotel · Virginia wine country</div></div>
+        <div class="vision-card"><div class="vc-icon">💆</div><div class="vc-label">Spa</div><div class="vc-val">Couples massage before dinner</div></div>
+        <div class="vision-card"><div class="vc-icon">🍝</div><div class="vc-label">Dinner</div><div class="vc-val">Italian tasting menu · wine pairing</div></div>
+        <div class="vision-card"><div class="vc-icon">📸</div><div class="vc-label">Photos</div><div class="vc-val">Couple portraits in hotel garden</div></div>
+        <div class="vision-card"><div class="vc-icon">💍</div><div class="vc-label">Gift wish</div><div class="vc-val">Engraved jewelry or experience upgrade</div></div>
+        <div class="vision-card"><div class="vc-icon">🌹</div><div class="vc-label">Flowers</div><div class="vc-val">Garden roses in cream and blush</div></div>
+      </div>
+      <div class="prog-bg"><div class="prog-fill" style="width:30%;background:var(--rose)"></div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">30% planned</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">🌙 Eid al-Adha Traditions</span><span class="badge bt">Jun 6</span></div>
+      <div class="vision-grid">
+        <div class="vision-card"><div class="vc-icon">🏠</div><div class="vc-label">Gathering</div><div class="vc-val">Full family · all three generations at home</div></div>
+        <div class="vision-card"><div class="vc-icon">👗</div><div class="vc-label">Outfits</div><div class="vc-val">Matching family · warm earth tones</div></div>
+        <div class="vision-card"><div class="vc-icon">🍛</div><div class="vc-label">Food</div><div class="vc-val">Mama's biryani · lamb · konafa</div></div>
+        <div class="vision-card"><div class="vc-icon">🎁</div><div class="vc-label">Gifts</div><div class="vc-val">Eid envelopes for children · modest gifts for elders</div></div>
+      </div>
+      <div class="prog-bg"><div class="prog-fill" style="width:80%;background:var(--teal)"></div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">80% planned</div>
+    </div>
+
+    <div class="add-card">
+      <div>
+        <div class="add-card-icon">✚</div>
+        <div class="add-card-label">Create new event board</div>
+        <div class="add-card-sub">Mother's Day · Graduation · Holiday</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MEMORY VAULT ── -->
+<section class="page" id="page-memories">
+  <div class="page-header">
+    <div><h2>Memory vault</h2><p>Preserve what matters for the people you love</p></div>
+    <button class="btn btn-primary btn-sm">+ Add memory</button>
+  </div>
+  <div class="tab-bar">
+    <button class="tab on">All</button>
+    <button class="tab">📸 Photos</button>
+    <button class="tab">💌 Letters</button>
+    <button class="tab">🍽️ Recipes</button>
+    <button class="tab">🎄 Traditions</button>
+    <button class="tab">📅 Important dates</button>
+  </div>
+  <div class="mem-grid">
+    <div class="mem-card"><div class="mem-icon" style="background:var(--rose-light)">📸</div><div class="mem-title">25th birthday in Cairo</div><div class="mem-sub">1999 · Where our family began</div><div style="margin-top:.5rem"><span class="badge bg" style="font-size:10px">Tradition</span></div></div>
+    <div class="mem-card"><div class="mem-icon" style="background:var(--purple-light)">💌</div><div class="mem-title">Letter to my daughter</div><div class="mem-sub">Opens on her 18th birthday</div><div style="margin-top:.5rem"><span class="badge bp" style="font-size:10px">⏰ Time-locked</span></div></div>
+    <div class="mem-card"><div class="mem-icon" style="background:var(--amber-light)">🍽️</div><div class="mem-title">Mama's Eid biryani</div><div class="mem-sub">Family recipe · 3 generations</div><div style="margin-top:.5rem"><span class="badge ba" style="font-size:10px">Recipe</span></div></div>
+    <div class="mem-card"><div class="mem-icon" style="background:var(--teal-light)">🎄</div><div class="mem-title">Our birthday traditions</div><div class="mem-sub">How we celebrate in this family</div><div style="margin-top:.5rem"><span class="badge bt" style="font-size:10px">Tradition</span></div></div>
+    <div class="mem-card"><div class="mem-icon" style="background:var(--rose-light)">❤️</div><div class="mem-title">What I want my family to know</div><div class="mem-sub">Personal · Private</div><div style="margin-top:.5rem"><span class="badge bpk" style="font-size:10px">🔒 Private</span></div></div>
+    <div class="mem-card"><div class="mem-icon" style="background:var(--purple-light)">📅</div><div class="mem-title">Important family dates</div><div class="mem-sub">Birthdays, anniversaries, milestones</div><div style="margin-top:.5rem"><span class="badge bg" style="font-size:10px">Dates</span></div></div>
+    <div class="add-card" style="min-height:130px"><div><div class="add-card-icon" style="font-size:20px">✚</div><div class="add-card-label">Add memory</div></div></div>
+  </div>
+</section>
+
+<!-- ── FAMILY ACCESS ── -->
+<section class="page" id="page-family">
+  <div class="page-header">
+    <div><h2>Family access controls</h2><p>You decide exactly who sees what — no guessing games</p></div>
+    <button class="btn btn-primary btn-sm">+ Invite member</button>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Your family members</span></div>
+      <div class="fm-row"><div class="fm-avatar" style="background:var(--rose-light);color:#72243E">JA</div><div style="flex:1"><div class="fm-name">James A. — Husband</div><div class="fm-role">james@email.com</div></div><span class="badge bp">Full access</span></div>
+      <div class="fm-row"><div class="fm-avatar" style="background:var(--teal-light);color:#0F6E56">MA</div><div style="flex:1"><div class="fm-name">Maya A. — Daughter</div><div class="fm-role">Gifts + Events only</div></div><span class="badge bt">Gifts + Events</span></div>
+      <div class="fm-row"><div class="fm-avatar" style="background:var(--purple-light);color:#3C3489">KA</div><div style="flex:1"><div class="fm-name">Khalid A. — Son</div><div class="fm-role">Gift list only</div></div><span class="badge bg">Gifts only</span></div>
+      <div class="fm-row"><div class="fm-avatar" style="background:var(--amber-light);color:#633806">LM</div><div style="flex:1"><div class="fm-name">Layla M. — Sister</div><div class="fm-role">Birthday + holiday wishes</div></div><span class="badge ba">Partial</span></div>
+      <div class="fm-row"><div class="fm-avatar" style="background:var(--rose-light);color:#72243E">NB</div><div style="flex:1"><div class="fm-name">Nadia B. — Best friend</div><div class="fm-role">Party inspiration boards</div></div><span class="badge bpk">Events only</span></div>
+      <div class="fm-row"><div class="fm-avatar" style="background:var(--coral-light);color:#712B13">RM</div><div style="flex:1"><div class="fm-name">Rania M. — Mom</div><div class="fm-role">View only</div></div><span class="badge bc">View only</span></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Access levels</span></div>
+      <div style="display:flex;flex-direction:column;gap:.55rem">
+        <div style="padding:.65rem;background:var(--cream);border-radius:8px"><div style="font-size:12px;font-weight:600;color:var(--berry);margin-bottom:3px">Full access</div><div style="font-size:11px;color:var(--text-muted)">All wishes, events, reminders, memory vault (except private items)</div></div>
+        <div style="padding:.65rem;background:var(--cream);border-radius:8px"><div style="font-size:12px;font-weight:600;color:var(--teal);margin-bottom:3px">Gifts + Events</div><div style="font-size:11px;color:var(--text-muted)">Wish lists and event planning boards</div></div>
+        <div style="padding:.65rem;background:var(--cream);border-radius:8px"><div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:3px">Gifts only</div><div style="font-size:11px;color:var(--text-muted)">Wish lists only — no events or memories</div></div>
+        <div style="padding:.65rem;background:var(--cream);border-radius:8px"><div style="font-size:12px;font-weight:600;color:#7A5C1E;margin-bottom:3px">Partial / custom</div><div style="font-size:11px;color:var(--text-muted)">Choose specific sections — birthday only, Eid only, etc.</div></div>
+        <div style="padding:.65rem;background:var(--cream);border-radius:8px"><div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:3px">View only</div><div style="font-size:11px;color:var(--text-muted)">Read profile — no gift tracker, no private memories</div></div>
+      </div>
+      <div style="margin-top:.85rem;padding:.75rem;border:1px solid var(--border-hover);border-radius:8px">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:.3rem">Your family link</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:.5rem">Share this so family can view your profile</div>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <input value="wishkeeper.app/sarah-2026" readonly style="font-size:11px;padding:.35rem .6rem">
+          <button class="btn btn-sm btn-primary" onclick="navigator.clipboard?.writeText('wishkeeper.app/sarah-2026')">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── GIFT TRACKER ── -->
+<section class="page" id="page-gifts">
+  <div class="page-header">
+    <div><h2>Secret gift tracker</h2><p>Family coordinates here — Sarah cannot see this page</p></div>
+  </div>
+  <div style="background:#FBF3E3;border:1px solid #C89B5A;border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.75rem">
+    <span style="font-size:18px">🔒</span>
+    <div style="font-size:12px;color:#5A4510;line-height:1.5">Gift reservations and purchase status are hidden from Sarah. Only family members can see this tracker. Prevents duplicate gifts.</div>
+  </div>
+  <div class="grid3" style="margin-bottom:1rem">
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">Total wishes</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--teal)">5</div><div class="stat-l">Reserved</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--text-muted)">3</div><div class="stat-l">Available</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">50th Birthday — gift coordination</span></div>
+    <div id="giftItems">
+      <div class="gift-row"><div class="check-box done" onclick="toggleG(this)">✓</div><div style="flex:1"><div style="font-size:13px;color:var(--text-muted);text-decoration:line-through">Louis Vuitton Neverfull tote</div><div style="font-size:11px;color:var(--teal)">Reserved by James · $1,500</div></div><span class="badge bt" style="font-size:10px">Purchased</span></div>
+      <div class="gift-row"><div class="check-box" onclick="toggleG(this)"></div><div style="flex:1"><div style="font-size:13px;color:var(--text)">Weekend in Savannah, GA</div><div style="font-size:11px;color:var(--text-muted)">Experiences · $400–600</div></div><button class="btn btn-sm btn-primary">Reserve</button></div>
+      <div class="gift-row"><div class="check-box done" onclick="toggleG(this)">✓</div><div style="flex:1"><div style="font-size:13px;color:var(--text-muted);text-decoration:line-through">Atomic Habits — James Clear</div><div style="font-size:11px;color:var(--teal)">Reserved by Maya · $18</div></div><span class="badge bt" style="font-size:10px">Purchased</span></div>
+      <div class="gift-row"><div class="check-box" onclick="toggleG(this)"></div><div style="flex:1"><div style="font-size:13px;color:var(--text)">Gold layering necklace — Mejuri</div><div style="font-size:11px;color:var(--text-muted)">Jewelry · $180</div></div><button class="btn btn-sm btn-primary">Reserve</button></div>
+      <div class="gift-row"><div class="check-box done" onclick="toggleG(this)">✓</div><div style="flex:1"><div style="font-size:13px;color:var(--text-muted);text-decoration:line-through">Custom family photo album</div><div style="font-size:11px;color:var(--teal)">Reserved by Layla · $85</div></div><span class="badge bt" style="font-size:10px">Purchased</span></div>
+      <div class="gift-row"><div class="check-box" onclick="toggleG(this)"></div><div style="flex:1"><div style="font-size:13px;color:var(--text)">Spa day at The Ivy Hotel</div><div style="font-size:11px;color:var(--text-muted)">Experiences · $150–200</div></div><button class="btn btn-sm btn-primary">Reserve</button></div>
+    </div>
+    <div style="margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+      <div style="font-size:12px;color:var(--text-muted)">5 of 8 gifts reserved</div>
+      <div style="font-size:12px;font-weight:500;color:var(--text)">$1,603 reserved of $2,398 total</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REMINDERS ── -->
+<section class="page" id="page-reminders">
+  <div class="page-header">
+    <div><h2>Reminder system</h2><p>Automatic reminders so your family never misses a milestone</p></div>
+    <button class="btn btn-primary btn-sm">+ Add reminder</button>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">Upcoming celebrations</span></div>
+    <div class="rem-row"><div class="rem-date"><div class="rem-mo">Jun</div><div class="rem-day">6</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">Eid al-Adha — Family gathering</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">25 days away · Notifying family 30, 7, and 1 days before</div></div><button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
+    <div class="rem-row"><div class="rem-date"><div class="rem-mo">Jul</div><div class="rem-day">28</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">Sarah's 50th Birthday 🎂</div><div style="font-size:11px;color:var(--rose);margin-top:2px;font-weight:500">47 days away · Gift reminder active</div></div><button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
+    <div class="rem-row"><div class="rem-date"><div class="rem-mo">Sep</div><div class="rem-day">12</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">25th Wedding Anniversary 💑</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">93 days away · Reminder to James in 60 days</div></div><button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
+    <div class="rem-row"><div class="rem-date"><div class="rem-mo">Nov</div><div class="rem-day">9</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">Mom's Birthday 🎂</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">151 days away</div></div><button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
+    <div class="rem-row"><div class="rem-date"><div class="rem-mo">May</div><div class="rem-day">11</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">Mother's Day 🌸</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Annual · Family notified 2 weeks before</div></div><button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
+    <div class="rem-row"><div class="rem-date"><div class="rem-mo">May</div><div class="rem-day">15</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">Maya's Graduation 🎓</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">2027 · Saved for future planning</div></div><button class="toggle" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">Notification schedule</span></div>
+    <div style="font-size:13px;color:var(--text-mid);line-height:2">
+      <strong>Birthdays</strong> — 60 days · 30 days · 7 days · day before<br>
+      <strong>Anniversaries</strong> — 30 days · 7 days · day before<br>
+      <strong>Eid / holidays</strong> — 14 days · 3 days · day before<br>
+      <strong>Mother's Day / Graduations</strong> — 14 days · 7 days
+    </div>
+  </div>
+</section>
+
+<!-- ── AI ASSISTANT ── -->
+<section class="page" id="page-ai">
+  <div class="page-header">
+    <div><h2>AI celebration assistant ✨</h2><p>Personalized ideas based on your wishes, profile, and upcoming events</p></div>
+  </div>
+  <div class="ai-bubble">
+    <div class="ai-bubble-header">✨ Based on your profile · Sarah's 50th is in 47 days</div>
+    Hi Sarah! You love Mediterranean food, jazz music, gold jewelry, and garden settings. Your anniversary is coming up in September too. Here are ideas tailored just for you — tap any suggestion to get a full response from Claude.
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Gift ideas for your family</span></div>
+      <div class="item-row"><div class="item-icon" style="background:var(--rose-light)">💍</div><div class="item-meta"><div class="item-title">Mejuri demi-fine gold set</div><div class="item-sub">Necklace + ring layering set · ~$280</div></div></div>
+      <div class="item-row"><div class="item-icon" style="background:var(--teal-light)">🌿</div><div class="item-meta"><div class="item-title">Spa day at The Ivy Hotel Baltimore</div><div class="item-sub">Mediterranean-inspired treatments · $175</div></div></div>
+      <div class="item-row"><div class="item-icon" style="background:var(--amber-light)">🌳</div><div class="item-meta"><div class="item-title">Custom fig tree for the garden</div><div class="item-sub">Meaningful, lasting, Mediterranean vibes</div></div></div>
+      <div class="item-row"><div class="item-icon" style="background:var(--purple-light)">📚</div><div class="item-meta"><div class="item-title">"Braiding Sweetgrass" — R. Wall Kimmerer</div><div class="item-sub">Nature + belonging · $16</div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Eid gift ideas 🌙</span></div>
+      <div class="item-row"><div class="item-icon" style="background:var(--teal-light)">🕯️</div><div class="item-meta"><div class="item-title">Maison Margiela Replica — Oud Minérale</div><div class="item-sub">Middle Eastern-inspired fragrance · $165</div></div></div>
+      <div class="item-row"><div class="item-icon" style="background:var(--amber-light)">🙏</div><div class="item-meta"><div class="item-title">Embroidered luxury prayer rug set</div><div class="item-sub">With matching tasbih · $120</div></div></div>
+      <div class="item-row"><div class="item-icon" style="background:var(--rose-light)">🎁</div><div class="item-meta"><div class="item-title">Curated Eid gift box</div><div class="item-sub">Dates, sweets, incense, self-care items · $85</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">Ask the assistant</span></div>
+    <div style="display:flex;flex-wrap:wrap">
+      <button class="ai-chip" onclick="sendPrompt('Give me 5 unique 50th birthday party themes for a woman who loves Mediterranean food, jazz, and garden settings')">🎂 Birthday themes ↗</button>
+      <button class="ai-chip" onclick="sendPrompt('Write a heartfelt 50th birthday message from a daughter to her mother who loves nature, family, and travel')">✉️ Write a birthday message ↗</button>
+      <button class="ai-chip" onclick="sendPrompt('What are 10 meaningful 25th anniversary gift ideas that focus on experiences over products?')">💑 Anniversary ideas ↗</button>
+      <button class="ai-chip" onclick="sendPrompt('Suggest thoughtful Eid al-Adha gift ideas for a woman in her 50s who loves home décor, fragrance, and wellness')">🌙 Eid gift ideas ↗</button>
+      <button class="ai-chip" onclick="sendPrompt('What are the best bucket-list travel destinations for a woman turning 50 who loves culture, food, and Mediterranean settings?')">✈️ Bucket-list travel ↗</button>
+      <button class="ai-chip" onclick="sendPrompt('Write a personalized Mother\'s Day card from children to their mother who values family traditions, Eid gatherings, and quiet mornings')">🌸 Mother's Day card ↗</button>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+const CAT_ICON = {'Gifts I Want':'🎁','Experiences I\'d Love':'✈️','Restaurants I\'d Like to Try':'🍽️','Home Items':'🏠','Jewelry':'💍','Books':'📚','Acts of Service':'❤️','Travel':'🌍','Charities':'🤝'};
+const CAT_BG   = {'Gifts I Want':'#EEEDFE','Experiences I\'d Love':'#E1F5EE','Restaurants I\'d Like to Try':'#FAEEDA','Home Items':'#FAECE7','Jewelry':'#FBEAF0','Books':'#EEEDFE','Acts of Service':'#FBEAF0','Travel':'#E1F5EE','Charities':'#E1F5EE'};
+const CAT_BADGE= {'Gifts I Want':'bp','Experiences I\'d Love':'bt','Restaurants I\'d Like to Try':'ba','Home Items':'bc','Jewelry':'bpk','Books':'bp','Acts of Service':'bpk','Travel':'bt','Charities':'bt'};
+
+let wishes = [
+  {title:'Louis Vuitton Neverfull tote',cat:'Gifts I Want',pri:'high',price:'$1,500',link:'lv.com'},
+  {title:'Weekend in Savannah, GA',cat:"Experiences I'd Love",pri:'high',price:'$400–600',link:''},
+  {title:'Dinner at Nobu Baltimore',cat:"Restaurants I'd Like to Try",pri:'high',price:'',link:''},
+  {title:'Gold layering necklace — Mejuri',cat:'Jewelry',pri:'med',price:'$180',link:'mejuri.com'},
+  {title:'Atomic Habits — James Clear',cat:'Books',pri:'med',price:'$18',link:''},
+  {title:'Cook me breakfast in bed',cat:'Acts of Service',pri:'high',price:'',link:''},
+  {title:'Amalfi Coast trip 2027',cat:'Travel',pri:'med',price:'$3,000+',link:''},
+  {title:'Custom ottoman for living room',cat:'Home Items',pri:'low',price:'$300',link:''},
+  {title:'Donation to local women\'s shelter',cat:'Charities',pri:'med',price:'Any amount',link:''},
+];
+let wFilter = 'all';
+
+function renderWishes() {
+  const el = document.getElementById('wishList');
+  const list = wFilter === 'all' ? wishes : wishes.filter(w => w.cat === wFilter);
+  if (!list.length) { el.innerHTML = '<div style="text-align:center;padding:1.5rem;color:#9A8090;font-size:13px;font-style:italic">No wishes in this category yet</div>'; return; }
+  el.innerHTML = list.map(w => `
+    <div class="item-row">
+      <div class="item-icon" style="background:${CAT_BG[w.cat]||'#EEEDFE'}">${CAT_ICON[w.cat]||'🎁'}</div>
+      <div class="item-meta">
+        <div class="item-title">${w.title}</div>
+        <div class="item-sub">${w.cat}${w.price?' · '+w.price:''}${w.link?' · <a href="#" style="color:#534AB7">'+w.link+'</a>':''}</div>
+      </div>
+      <span class="badge ${CAT_BADGE[w.cat]||'bg'}" style="margin-right:6px;font-size:10px">${w.cat.split(' ')[0]}</span>
+      <div class="priority-dot ${w.pri==='high'?'dot-h':w.pri==='med'?'dot-m':'dot-l'}"></div>
+    </div>`).join('');
+}
+
+function filterW(el, cat) {
+  wFilter = cat;
+  document.querySelectorAll('#wTabs .tab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  renderWishes();
+}
+
+function openAddWish() {
+  goTo(document.querySelector('[onclick*=wishes]'), 'wishes');
+  document.getElementById('addForm').classList.add('open');
+}
+function closeAddWish() { document.getElementById('addForm').classList.remove('open'); }
+
+function saveWish() {
+  const t = document.getElementById('wt').value.trim();
+  if (!t) return;
+  wishes.unshift({ title:t, cat:document.getElementById('wc').value, pri:document.getElementById('wp').value, price:document.getElementById('wpr').value.trim(), link:document.getElementById('wlk').value.trim() });
+  document.getElementById('wt').value = '';
+  document.getElementById('wpr').value = '';
+  document.getElementById('wlk').value = '';
+  closeAddWish();
+  wFilter = 'all';
+  document.querySelectorAll('#wTabs .tab').forEach((t,i) => t.classList.toggle('on', i===0));
+  renderWishes();
+}
+
+function toggleG(el) {
+  el.classList.toggle('done');
+  const row = el.closest('.gift-row');
+  const name = row.querySelector('div[style*="font-size:13px"]');
+  if (el.classList.contains('done')) {
+    el.textContent = '✓';
+    name.style.textDecoration = 'line-through';
+    name.style.color = 'var(--text-muted)';
+  } else {
+    el.textContent = '';
+    name.style.textDecoration = 'none';
+    name.style.color = 'var(--text)';
+  }
+}
+
+function goTo(el, id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  if (id === 'wishes') renderWishes();
+  window.scrollTo(0, 0);
+}
+
+renderWishes();
+</script>
+</body>
+</html>
