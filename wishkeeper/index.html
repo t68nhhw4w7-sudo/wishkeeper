@@ -4,534 +4,279 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>WishKeeper — Your Celebration Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600&display=swap');
+:root {
+  --berry:#6D2E46; --berry2:#8B3A58; --berry3:#F2E6EC;
+  --rose:#D4537E; --rose2:#FBEAF0;
+  --cream:#FAF8F5; --cream2:#F3EEE9;
+  --gold:#B8863C; --gold2:#FBF3E3;
+  --teal:#1A8F68; --teal2:#E0F5EE;
+  --purple:#4A42A8; --purple2:#EEEDFE;
+  --ink:#1A0812; --ink2:#5A3D4A; --ink3:#9A7A87;
+  --border:rgba(109,46,70,0.13);
+  --white:#fff;
+  --r:14px; --rs:8px;
+  --shadow:0 2px 12px rgba(109,46,70,0.09);
+  --shadow2:0 8px 32px rgba(109,46,70,0.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.2}
+button,input,select,textarea{font-family:'DM Sans',sans-serif;font-size:14px}
+input,select,textarea{width:100%;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--white);color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--berry);box-shadow:0 0 0 3px rgba(109,46,70,0.1)}
+textarea{resize:vertical;min-height:80px}
 
-  :root {
-    --berry: #6D2E46;
-    --berry-mid: #8B3A58;
-    --berry-light: #F5EAF0;
-    --rose: #D4537E;
-    --rose-light: #FBEAF0;
-    --cream: #FAF7F4;
-    --gold: #C89B5A;
-    --teal: #1D9E75;
-    --teal-light: #E1F5EE;
-    --purple: #534AB7;
-    --purple-light: #EEEDFE;
-    --amber-light: #FAEEDA;
-    --coral-light: #FAECE7;
-    --text: #1A0A12;
-    --text-mid: #5A4550;
-    --text-muted: #9A8090;
-    --border: rgba(109,46,70,0.12);
-    --border-hover: rgba(109,46,70,0.25);
-    --white: #FFFFFF;
-    --sidebar-w: 230px;
-    --radius: 12px;
-    --radius-sm: 8px;
-  }
+/* Layout */
+.shell{display:flex;min-height:100vh}
+.sidebar{width:220px;background:var(--berry);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;transition:transform .3s}
+.main{margin-left:220px;flex:1;min-height:100vh}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* Sidebar */
+.logo{padding:1.4rem 1.1rem 1rem;border-bottom:1px solid rgba(255,255,255,0.12)}
+.logo h1{font-size:22px;color:#fff;letter-spacing:-.3px}
+.logo-tagline{font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;font-family:'DM Sans',sans-serif}
+.nav-group{padding:.6rem 0}
+.nav-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:.09em;padding:.4rem 1.1rem .25rem}
+.nav-btn{display:flex;align-items:center;gap:9px;width:calc(100% - 1rem);margin:0 .5rem;padding:.5rem .85rem;border:none;background:none;color:rgba(255,255,255,0.65);border-radius:9px;cursor:pointer;font-size:13px;font-weight:500;text-align:left;transition:background .15s,color .15s}
+.nav-btn:hover{background:rgba(255,255,255,0.1);color:#fff}
+.nav-btn.active{background:rgba(255,255,255,0.18);color:#fff}
+.nav-icon{font-size:16px;flex-shrink:0;width:20px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--rose);color:#fff;font-size:10px;padding:1px 7px;border-radius:20px;font-weight:600}
+.sidebar-foot{margin-top:auto;padding:1rem 1.1rem;border-top:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:9px}
+.sidebar-avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0;cursor:pointer}
+.sidebar-name{font-size:12px;font-weight:600;color:#fff}
+.sidebar-plan{font-size:10px;color:rgba(255,255,255,0.45);margin-top:1px}
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 14px;
-    line-height: 1.5;
-  }
+/* Pages */
+.page{display:none;padding:2rem 2.25rem 4rem;max-width:960px}
+.page.active{display:block}
+.page-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.75rem;gap:1rem;flex-wrap:wrap}
+.page-top h2{font-size:28px;color:var(--ink)}
+.page-top p{font-size:13px;color:var(--ink3);margin-top:4px}
 
-  h1,h2,h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:.45rem 1rem;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--white);color:var(--ink);cursor:pointer;font-size:13px;font-weight:500;transition:all .15s;white-space:nowrap}
+.btn:hover{background:var(--berry3);border-color:var(--berry)}
+.btn-primary{background:var(--berry);border-color:var(--berry);color:#fff}
+.btn-primary:hover{background:var(--berry2)}
+.btn-sm{padding:.32rem .75rem;font-size:12px}
+.btn-ghost{border-color:transparent;background:transparent}
+.btn-ghost:hover{background:var(--berry3)}
+.btn-danger{border-color:#e5a0a0;color:#a33}
+.btn-danger:hover{background:#fff0f0}
 
-  /* ── Layout ── */
-  .shell { display: flex; min-height: 100vh; }
+/* Cards */
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.25rem;margin-bottom:.85rem;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem}
+.card-title{font-size:15px;font-weight:600;color:var(--ink)}
 
-  .sidebar {
-    width: var(--sidebar-w);
-    background: var(--berry);
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow-y: auto;
-  }
+/* Grid */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.85rem;margin-bottom:.85rem}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.75rem;margin-bottom:.85rem}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem;margin-bottom:1.25rem}
 
-  .logo {
-    padding: 1.5rem 1.25rem 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-  .logo h1 {
-    font-size: 22px;
-    color: #fff;
-    letter-spacing: -0.3px;
-  }
-  .logo-sub {
-    font-size: 11px;
-    color: rgba(255,255,255,0.55);
-    margin-top: 2px;
-    font-family: 'Inter', sans-serif;
-  }
+/* Stats */
+.stat{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;text-align:center;box-shadow:var(--shadow)}
+.stat-n{font-size:28px;font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--berry)}
+.stat-l{font-size:11px;color:var(--ink3);margin-top:3px;font-weight:500}
 
-  .nav { padding: .75rem 0; flex: 1; }
-  .nav-section { margin-bottom: .25rem; }
-  .nav-label {
-    font-size: 10px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.4);
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    padding: .5rem 1.25rem .3rem;
-  }
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: .52rem 1.1rem;
-    font-size: 13px;
-    color: rgba(255,255,255,0.7);
-    cursor: pointer;
-    border-radius: 8px;
-    margin: 0 .5rem;
-    transition: background .15s, color .15s;
-    border: none;
-    background: none;
-    width: calc(100% - 1rem);
-    text-align: left;
-  }
-  .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
-  .nav-item.active { background: rgba(255,255,255,0.18); color: #fff; font-weight: 500; }
-  .nav-item .icon { font-size: 16px; flex-shrink: 0; }
-  .nav-badge {
-    margin-left: auto;
-    background: var(--rose);
-    color: #fff;
-    font-size: 10px;
-    padding: 1px 7px;
-    border-radius: 20px;
-    font-weight: 600;
-  }
+/* Badges */
+.badge{display:inline-flex;align-items:center;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500}
+.bp{background:var(--purple2);color:#3C3489}
+.bt{background:var(--teal2);color:#0D6649}
+.bpk{background:var(--rose2);color:#72243E}
+.ba{background:var(--gold2);color:#7A5C1E}
+.bg{background:var(--cream2);color:var(--ink2)}
 
-  .sidebar-footer {
-    padding: 1rem 1.1rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 600;
-    color: #fff;
-    flex-shrink: 0;
-  }
-  .sidebar-footer-name { font-size: 12px; font-weight: 500; color: #fff; }
-  .sidebar-footer-plan { font-size: 10px; color: rgba(255,255,255,0.5); }
+/* Item rows */
+.row{display:flex;align-items:flex-start;gap:10px;padding:.7rem 0;border-bottom:1px solid var(--border)}
+.row:last-child{border-bottom:none;padding-bottom:0}
+.row-icon{width:36px;height:36px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.row-meta{flex:1;min-width:0}
+.row-title{font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+.pdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.ph{background:var(--rose)}.pm{background:var(--gold)}.pl{background:var(--teal)}
 
-  /* ── Main content ── */
-  .main { flex: 1; padding: 2rem 2rem 3rem; min-width: 0; max-width: 900px; }
+/* Progress */
+.prog-bg{height:5px;background:var(--berry3);border-radius:3px;margin-top:.65rem}
+.prog-fill{height:5px;border-radius:3px;background:var(--berry);transition:width .5s}
 
-  .page { display: none; }
-  .page.active { display: block; }
+/* Tabs */
+.tabs{display:flex;gap:.2rem;padding:.25rem;background:var(--cream2);border-radius:var(--rs);margin-bottom:1rem;flex-wrap:wrap}
+.tab-btn{padding:.32rem .75rem;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;color:var(--ink2);border:none;background:none;transition:all .15s}
+.tab-btn.on{background:var(--white);color:var(--ink);box-shadow:0 1px 4px rgba(109,46,70,0.1)}
 
-  .page-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 1.75rem;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-  .page-header h2 { font-size: 26px; color: var(--text); line-height: 1.2; }
-  .page-header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+/* Section label */
+.slabel{font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin:.9rem 0 .45rem}
 
-  /* ── Cards ── */
-  .card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.1rem 1.25rem;
-    margin-bottom: .85rem;
-  }
-  .card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: .85rem;
-  }
-  .card-title { font-size: 14px; font-weight: 600; color: var(--text); }
+/* Profile detail block */
+.detail-block{background:var(--white);border:1px solid var(--border);border-radius:var(--rs);padding:.75rem;margin-bottom:.6rem}
+.detail-label{font-size:11px;color:var(--ink3);margin-bottom:3px;font-weight:500}
+.detail-val{font-size:13px;color:var(--ink);line-height:1.5}
+.detail-empty{font-size:12px;color:#c0a0b0;font-style:italic}
 
-  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: .85rem; margin-bottom: .85rem; }
-  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .75rem; margin-bottom: .85rem; }
-  .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: .75rem; margin-bottom: 1.25rem; }
+/* Section card */
+.sc{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--berry);border-radius:var(--rs);padding:.85rem 1rem;margin-bottom:.6rem;transition:border-left-color .2s}
+.sc-head{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.sc-emoji{font-size:16px}
+.sc-title{font-size:13px;font-weight:600}
+.sc-val{font-size:13px;color:var(--ink2);line-height:1.6}
+.sc-empty{font-size:12px;color:#c0a0b0;font-style:italic}
 
-  /* ── Stat cards ── */
-  .stat {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 1rem;
-    text-align: center;
-  }
-  .stat-n { font-size: 26px; font-weight: 700; color: var(--berry); font-family: 'Playfair Display', serif; }
-  .stat-l { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+/* Vision board */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.6rem;margin-bottom:.75rem}
+.vcard{background:var(--cream2);border-radius:var(--rs);padding:.75rem;border:1px solid transparent;transition:all .2s;cursor:pointer}
+.vcard:hover{background:var(--white);border-color:var(--border);box-shadow:var(--shadow)}
+.vcard-icon{font-size:20px;margin-bottom:.35rem}
+.vcard-label{font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.vcard-val{font-size:12px;color:var(--ink);line-height:1.4}
+.vcard-empty{font-size:12px;color:#c0a0b0;font-style:italic}
 
-  /* ── Buttons ── */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: .42rem .9rem;
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    border: 1px solid var(--border-hover);
-    background: transparent;
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    transition: background .15s;
-    white-space: nowrap;
-  }
-  .btn:hover { background: var(--berry-light); }
-  .btn-primary { background: var(--berry); border-color: var(--berry); color: #fff; }
-  .btn-primary:hover { background: var(--berry-mid); }
-  .btn-sm { padding: .3rem .7rem; font-size: 11px; }
+/* Memory grid */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:.75rem}
+.mcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:.9rem;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
+.mcard:hover{box-shadow:var(--shadow2);transform:translateY(-2px)}
+.mcard-icon{width:42px;height:42px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:.6rem}
+.mcard-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.mcard-sub{font-size:11px;color:var(--ink3)}
 
-  /* ── Badges ── */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    font-size: 11px;
-    padding: 2px 9px;
-    border-radius: 20px;
-    font-weight: 500;
-  }
-  .bp { background: var(--purple-light); color: #3C3489; }
-  .bt { background: var(--teal-light); color: #0F6E56; }
-  .bpk { background: var(--rose-light); color: #72243E; }
-  .ba { background: var(--amber-light); color: #633806; }
-  .bc { background: var(--coral-light); color: #712B13; }
-  .bg { background: #F1EFE8; color: #5F5E5A; }
-  .bgold { background: #FBF3E3; color: #7A5C1E; }
+/* Family rows */
+.frow{display:flex;align-items:center;gap:10px;padding:.6rem 0;border-bottom:1px solid var(--border)}
+.frow:last-child{border-bottom:none}
+.favatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
 
-  /* ── Item rows ── */
-  .item-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: .65rem 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .item-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .item-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 17px;
-    flex-shrink: 0;
-  }
-  .item-meta { flex: 1; min-width: 0; }
-  .item-title { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .item-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-  .priority-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
-  .dot-h { background: var(--rose); }
-  .dot-m { background: var(--gold); }
-  .dot-l { background: var(--teal); }
+/* Gift rows */
+.grow{display:flex;align-items:center;gap:10px;padding:.6rem 0;border-bottom:1px solid var(--border)}
+.grow:last-child{border-bottom:none}
+.gcheck{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .18s;font-size:12px;color:#fff}
+.gcheck.done{background:var(--teal);border-color:var(--teal)}
 
-  /* ── Progress bar ── */
-  .prog-bg { height: 4px; background: var(--berry-light); border-radius: 2px; margin-top: .6rem; }
-  .prog-fill { height: 4px; border-radius: 2px; background: var(--berry); }
+/* Reminder rows */
+.remrow{display:flex;align-items:center;gap:10px;padding:.65rem 0;border-bottom:1px solid var(--border)}
+.remrow:last-child{border-bottom:none}
+.remdate{width:46px;height:46px;border-radius:var(--rs);background:var(--purple2);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.remmo{font-size:9px;font-weight:600;color:var(--purple);text-transform:uppercase;letter-spacing:.04em}
+.remday{font-size:20px;font-family:'Cormorant Garamond',serif;font-weight:600;color:#26215C;line-height:1}
 
-  /* ── Tab bar ── */
-  .tab-bar {
-    display: flex;
-    gap: .2rem;
-    padding: .2rem;
-    background: var(--berry-light);
-    border-radius: var(--radius-sm);
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-  }
-  .tab {
-    padding: .3rem .7rem;
-    border-radius: 6px;
-    font-size: 12px;
-    cursor: pointer;
-    color: var(--text-muted);
-    transition: all .15s;
-    border: none;
-    background: none;
-    font-family: 'Inter', sans-serif;
-  }
-  .tab.on { background: var(--white); color: var(--text); font-weight: 500; }
+/* Toggle */
+.toggle{width:36px;height:20px;border-radius:10px;background:var(--cream2);border:none;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s;padding:0}
+.toggle.on{background:var(--berry)}
+.toggle::after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.toggle.on::after{left:19px}
 
-  /* ── Profile sections ── */
-  .section-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--berry);
-    border-radius: var(--radius-sm);
-    padding: .85rem 1rem;
-    margin-bottom: .6rem;
-  }
-  .sc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-  .sc-emoji { font-size: 17px; }
-  .sc-title { font-size: 13px; font-weight: 600; }
-  .sc-value { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
-  .sc-empty { font-size: 12px; color: #c9b0b8; font-style: italic; }
+/* AI */
+.ai-bubble{background:var(--purple2);border-radius:var(--r);padding:1rem 1.15rem;margin-bottom:.75rem;font-size:13px;color:#26215C;line-height:1.7}
+.ai-header{display:flex;align-items:center;gap:7px;margin-bottom:.5rem;font-size:12px;font-weight:600;color:#3C3489}
+.ai-chip{display:inline-flex;align-items:center;gap:5px;padding:.38rem .85rem;background:var(--white);border:1.5px solid var(--border);border-radius:var(--rs);font-size:12px;cursor:pointer;margin:.25rem .25rem 0 0;transition:all .2s;color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:500}
+.ai-chip:hover{border-color:var(--berry);color:var(--berry);background:var(--berry3)}
 
-  /* ── Event vision board ── */
-  .vision-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: .6rem; margin-bottom: .75rem; }
-  .vision-card {
-    background: var(--cream);
-    border-radius: var(--radius-sm);
-    padding: .75rem;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: border-color .15s, background .15s;
-  }
-  .vision-card:hover { background: var(--white); border-color: var(--border-hover); }
-  .vc-icon { font-size: 19px; margin-bottom: .35rem; }
-  .vc-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 2px; }
-  .vc-val { font-size: 12px; color: var(--text); line-height: 1.4; }
+/* Wish add form */
+.add-form{background:var(--white);border:1.5px solid var(--berry);border-radius:var(--r);padding:1.1rem;margin-bottom:.85rem;display:none;box-shadow:var(--shadow2)}
+.add-form.open{display:block;animation:slideDown .2s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:.65rem}
+.form-row.one{grid-template-columns:1fr}
+.form-row.three{grid-template-columns:1fr 1fr 1fr}
+label.fl{font-size:11px;font-weight:600;color:var(--ink2);display:block;margin-bottom:4px}
 
-  /* ── Memory vault ── */
-  .mem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .75rem; }
-  .mem-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: .9rem;
-    cursor: pointer;
-    transition: border-color .15s;
-  }
-  .mem-card:hover { border-color: var(--border-hover); }
-  .mem-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 19px; margin-bottom: .6rem; }
-  .mem-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
-  .mem-sub { font-size: 11px; color: var(--text-muted); }
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,8,18,0.6);z-index:500;overflow-y:auto;padding:2rem 1rem;pointer-events:none}
+.modal-overlay.open{display:flex;align-items:flex-start;justify-content:center;pointer-events:auto;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--white);border-radius:20px;width:100%;max-width:660px;box-shadow:0 24px 80px rgba(109,46,70,0.2);overflow:hidden;animation:slideUp .25s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);background:var(--white);position:sticky;top:0;z-index:1}
+.modal-head h3{font-size:20px}
+.modal-body{padding:1.5rem;max-height:75vh;overflow-y:auto}
+.modal-section{font-size:11px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin:1.1rem 0 .65rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.modal-section:first-child{margin-top:0}
+.field{margin-bottom:.75rem}
+.field label{font-size:12px;font-weight:500;color:var(--ink2);display:block;margin-bottom:4px}
+.modal-foot{display:flex;justify-content:flex-end;gap:.6rem;padding:1rem 1.5rem;border-top:1px solid var(--border);background:var(--cream)}
 
-  /* ── Family rows ── */
-  .fm-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: .6rem 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .fm-row:last-child { border-bottom: none; }
-  .fm-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 600;
-    flex-shrink: 0;
-  }
-  .fm-name { font-size: 13px; font-weight: 500; color: var(--text); }
-  .fm-role { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+/* Toast */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--ink);color:#fff;padding:.75rem 1.25rem;border-radius:var(--r);font-size:13px;font-weight:500;z-index:9999;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.25);animation:toastIn .25s ease}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-  /* ── Gift tracker ── */
-  .gift-row { display: flex; align-items: center; gap: 10px; padding: .58rem 0; border-bottom: 1px solid var(--border); }
-  .gift-row:last-child { border-bottom: none; }
-  .check-box {
-    width: 19px;
-    height: 19px;
-    border-radius: 5px;
-    border: 1.5px solid var(--border-hover);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: all .15s;
-    font-size: 11px;
-  }
-  .check-box.done { background: var(--teal); border-color: var(--teal); color: #fff; }
+/* Add/dashed card */
+.dashed-card{border:2px dashed var(--border);border-radius:var(--r);display:flex;align-items:center;justify-content:center;min-height:150px;cursor:pointer;transition:all .2s;text-align:center;padding:1.5rem;background:transparent}
+.dashed-card:hover{border-color:var(--berry);background:var(--berry3)}
+.dashed-icon{font-size:24px;color:var(--ink3);margin-bottom:.4rem}
+.dashed-label{font-size:13px;color:var(--ink3);font-weight:500}
+.dashed-sub{font-size:11px;color:#c0a0b0;margin-top:3px}
 
-  /* ── Reminders ── */
-  .rem-row { display: flex; align-items: center; gap: 10px; padding: .6rem 0; border-bottom: 1px solid var(--border); }
-  .rem-row:last-child { border-bottom: none; }
-  .rem-date {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-sm);
-    background: var(--purple-light);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .rem-mo { font-size: 9px; font-weight: 600; color: var(--purple); text-transform: uppercase; }
-  .rem-day { font-size: 19px; font-weight: 700; color: #26215C; line-height: 1.1; font-family: 'Playfair Display', serif; }
+/* Delete btn on items */
+.del-btn{opacity:0;background:none;border:none;cursor:pointer;color:#cc4444;font-size:15px;padding:0 4px;transition:opacity .15s}
+.row:hover .del-btn,.grow:hover .del-btn,.frow:hover .del-btn,.remrow:hover .del-btn{opacity:1}
 
-  .toggle {
-    width: 34px;
-    height: 20px;
-    border-radius: 10px;
-    background: #e0d8dc;
-    position: relative;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: background .2s;
-    border: none;
-  }
-  .toggle.on { background: var(--berry); }
-  .toggle::after {
-    content: '';
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background: #fff;
-    border-radius: 50%;
-    top: 3px;
-    left: 3px;
-    transition: left .2s;
-  }
-  .toggle.on::after { left: 17px; }
+/* Progress text row */
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-top:.35rem}
+.prog-label{font-size:11px;color:var(--ink3)}
 
-  /* ── AI chips ── */
-  .ai-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: .38rem .8rem;
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-    cursor: pointer;
-    margin: .2rem .2rem 0 0;
-    transition: all .15s;
-    font-family: 'Inter', sans-serif;
-    color: var(--text);
-  }
-  .ai-chip:hover { border-color: var(--berry); color: var(--berry); background: var(--berry-light); }
+/* Event card */
+.event-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.25rem;margin-bottom:.85rem;box-shadow:var(--shadow);cursor:pointer;transition:all .2s}
+.event-card:hover{box-shadow:var(--shadow2);transform:translateY(-2px)}
 
-  /* ── AI bubble ── */
-  .ai-bubble {
-    background: var(--purple-light);
-    border-radius: var(--radius);
-    padding: .9rem 1.1rem;
-    margin-bottom: .75rem;
-    font-size: 13px;
-    color: #26215C;
-    line-height: 1.65;
-  }
-  .ai-bubble-header { display: flex; align-items: center; gap: 7px; margin-bottom: .45rem; font-size: 12px; font-weight: 600; color: #3C3489; }
-
-  /* ── Add wish form ── */
-  .add-form {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1rem 1.1rem;
-    margin-bottom: .85rem;
-    display: none;
-  }
-  .add-form.open { display: block; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-bottom: .6rem; }
-  .form-row.full { grid-template-columns: 1fr; }
-  input, select, textarea {
-    width: 100%;
-    padding: .48rem .75rem;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border-hover);
-    background: var(--cream);
-    color: var(--text);
-    font-size: 13px;
-    font-family: 'Inter', sans-serif;
-    outline: none;
-    transition: border-color .15s;
-  }
-  input:focus, select:focus, textarea:focus { border-color: var(--berry); }
-  textarea { resize: vertical; min-height: 70px; }
-
-  /* ── Section heading ── */
-  .group-label {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    margin: .85rem 0 .5rem;
-  }
-
-  /* ── Dashed add card ── */
-  .add-card {
-    border: 1.5px dashed var(--border-hover);
-    border-radius: var(--radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 160px;
-    cursor: pointer;
-    transition: border-color .15s;
-    text-align: center;
-    padding: 1.5rem;
-  }
-  .add-card:hover { border-color: var(--berry); }
-  .add-card-icon { font-size: 26px; color: var(--text-muted); margin-bottom: .4rem; }
-  .add-card-label { font-size: 13px; color: var(--text-muted); }
-  .add-card-sub { font-size: 11px; color: #c9b0b8; margin-top: 3px; }
-
-  /* ── Responsiveness ── */
-  @media(max-width: 700px) {
-    .sidebar { display: none; }
-    .main { padding: 1rem; }
-  }
+/* Responsive */
+@media(max-width:720px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .page{padding:1rem 1rem 4rem}
+  .mob-header{display:flex}
+}
+.mob-header{display:none;align-items:center;justify-content:space-between;padding:.85rem 1rem;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:90}
+.mob-menu-btn{background:none;border:none;cursor:pointer;font-size:22px;color:var(--berry)}
+.mob-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--berry)}
 </style>
 </head>
 <body>
+
+<div id="toast" class="toast"></div>
+
+<!-- Mobile header -->
+<div class="mob-header">
+  <button class="mob-menu-btn" onclick="toggleSidebar()">☰</button>
+  <div class="mob-title">WishKeeper</div>
+  <div style="width:36px"></div>
+</div>
+
 <div class="shell">
 
 <!-- ══ SIDEBAR ══ -->
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <div class="logo">
     <h1>WishKeeper</h1>
-    <div class="logo-sub">Your celebration hub</div>
+    <div class="logo-tagline">Your celebration hub</div>
   </div>
-  <nav class="nav">
-    <div class="nav-section">
+  <nav>
+    <div class="nav-group">
       <div class="nav-label">My space</div>
-      <button class="nav-item active" onclick="goTo(this,'dash')"><span class="icon">🏠</span> Dashboard</button>
-      <button class="nav-item" onclick="goTo(this,'profile')"><span class="icon">👤</span> My Profile</button>
-      <button class="nav-item" onclick="goTo(this,'wishes')"><span class="icon">🎁</span> Wish Lists</button>
-      <button class="nav-item" onclick="goTo(this,'events')"><span class="icon">🎂</span> Event Boards</button>
-      <button class="nav-item" onclick="goTo(this,'memories')"><span class="icon">📸</span> Memory Vault</button>
+      <button class="nav-btn active" onclick="goTo(this,'dash')"><span class="nav-icon">🏠</span> Dashboard</button>
+      <button class="nav-btn" onclick="goTo(this,'profile')"><span class="nav-icon">👤</span> My Profile</button>
+      <button class="nav-btn" onclick="goTo(this,'wishes')"><span class="nav-icon">🎁</span> Wish Lists</button>
+      <button class="nav-btn" onclick="goTo(this,'events')"><span class="nav-icon">🎂</span> Event Boards</button>
+      <button class="nav-btn" onclick="goTo(this,'memories')"><span class="nav-icon">📸</span> Memory Vault</button>
     </div>
-    <div class="nav-section">
+    <div class="nav-group">
       <div class="nav-label">Family</div>
-      <button class="nav-item" onclick="goTo(this,'family')"><span class="icon">👨‍👩‍👧</span> Family Access</button>
-      <button class="nav-item" onclick="goTo(this,'gifts')"><span class="icon">🛍️</span> Gift Tracker <span class="nav-badge">3</span></button>
-      <button class="nav-item" onclick="goTo(this,'reminders')"><span class="icon">🔔</span> Reminders</button>
+      <button class="nav-btn" onclick="goTo(this,'family')"><span class="nav-icon">👨‍👩‍👧</span> Family Access</button>
+      <button class="nav-btn" onclick="goTo(this,'gifts')"><span class="nav-icon">🛍️</span> Gift Tracker <span class="nav-badge" id="giftBadge">3</span></button>
+      <button class="nav-btn" onclick="goTo(this,'reminders')"><span class="nav-icon">🔔</span> Reminders</button>
     </div>
-    <div class="nav-section">
-      <button class="nav-item" onclick="goTo(this,'ai')"><span class="icon">✨</span> AI Assistant</button>
+    <div class="nav-group">
+      <button class="nav-btn" onclick="goTo(this,'ai')"><span class="nav-icon">✨</span> AI Assistant</button>
     </div>
   </nav>
-  <div class="sidebar-footer">
-    <div class="avatar">SA</div>
+  <div class="sidebar-foot">
+    <div class="sidebar-avatar" onclick="goTo(document.querySelector('[onclick*=profile]'),'profile')" id="sidebarAvatar">SA</div>
     <div>
-      <div class="sidebar-footer-name">Sarah A.</div>
-      <div class="sidebar-footer-plan">Premium plan</div>
+      <div class="sidebar-name" id="sidebarName">Sarah A.</div>
+      <div class="sidebar-plan">Premium plan</div>
     </div>
   </div>
 </aside>
@@ -541,389 +286,186 @@
 
 <!-- ── DASHBOARD ── -->
 <section class="page active" id="page-dash">
-  <div class="page-header">
+  <div class="page-top">
     <div>
-      <h2>Welcome back, Sarah ✨</h2>
-      <p>Your 50th birthday is in 47 days — your family is ready to celebrate you</p>
+      <h2 id="dash-greeting">Welcome back, Sarah ✨</h2>
+      <p id="dash-sub">Your 50th birthday is in 47 days — your family is ready to celebrate you</p>
     </div>
+    <button class="btn btn-primary" onclick="goTo(document.querySelector('[onclick*=wishes]'),'wishes');openAddWish()">+ Add wish</button>
   </div>
-  <div class="grid4">
-    <div class="stat"><div class="stat-n">24</div><div class="stat-l">Wishes</div></div>
-    <div class="stat"><div class="stat-n">6</div><div class="stat-l">Family members</div></div>
-    <div class="stat"><div class="stat-n">3</div><div class="stat-l">Events planned</div></div>
-    <div class="stat"><div class="stat-n">8</div><div class="stat-l">Gifts reserved</div></div>
+  <div class="g4" id="dashStats">
+    <div class="stat"><div class="stat-n" id="ds-wishes">0</div><div class="stat-l">Wishes</div></div>
+    <div class="stat"><div class="stat-n" id="ds-family">0</div><div class="stat-l">Family members</div></div>
+    <div class="stat"><div class="stat-n" id="ds-events">0</div><div class="stat-l">Events planned</div></div>
+    <div class="stat"><div class="stat-n" id="ds-reserved">0</div><div class="stat-l">Gifts reserved</div></div>
   </div>
-  <div class="grid2">
+  <div class="g2">
     <div class="card">
-      <div class="card-header">
-        <span class="card-title">Top wishes right now</span>
-        <button class="btn btn-sm" onclick="goTo(document.querySelector('[onclick*=wishes]'),'wishes')">See all</button>
-      </div>
-      <div class="item-row">
-        <div class="item-icon" style="background:var(--rose-light)">💼</div>
-        <div class="item-meta"><div class="item-title">Louis Vuitton Neverfull tote</div><div class="item-sub">Gifts · $1,500 · lv.com</div></div>
-        <div class="priority-dot dot-h"></div>
-      </div>
-      <div class="item-row">
-        <div class="item-icon" style="background:var(--teal-light)">✈️</div>
-        <div class="item-meta"><div class="item-title">Weekend in Savannah, GA</div><div class="item-sub">Experiences · $400–600</div></div>
-        <div class="priority-dot dot-h"></div>
-      </div>
-      <div class="item-row">
-        <div class="item-icon" style="background:var(--amber-light)">🍽️</div>
-        <div class="item-meta"><div class="item-title">Dinner at Nobu Baltimore</div><div class="item-sub">Restaurants · Michelin-starred</div></div>
-        <div class="priority-dot dot-h"></div>
-      </div>
-      <div class="item-row">
-        <div class="item-icon" style="background:var(--rose-light)">💍</div>
-        <div class="item-meta"><div class="item-title">Gold layering necklace — Mejuri</div><div class="item-sub">Jewelry · $180 · mejuri.com</div></div>
-        <div class="priority-dot dot-m"></div>
-      </div>
+      <div class="card-head"><span class="card-title">Top wishes</span><button class="btn btn-sm btn-ghost" onclick="goTo(document.querySelector('[onclick*=wishes]'),'wishes')">See all →</button></div>
+      <div id="dash-wishes-list"></div>
     </div>
     <div class="card">
-      <div class="card-header">
-        <span class="card-title">Upcoming celebrations</span>
-        <button class="btn btn-sm" onclick="goTo(document.querySelector('[onclick*=events]'),'events')">See all</button>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.6rem">
-        <div style="padding:.65rem;background:var(--cream);border-radius:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
-            <div style="font-size:13px;font-weight:500">🎂 50th Birthday Party</div>
-            <span class="badge bp">Jul 28</span>
-          </div>
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:.4rem">Garden party · 45 guests</div>
-          <div class="prog-bg"><div class="prog-fill" style="width:65%"></div></div>
-          <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">65% planned</div>
-        </div>
-        <div style="padding:.65rem;background:var(--cream);border-radius:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
-            <div style="font-size:13px;font-weight:500">💑 25th Anniversary</div>
-            <span class="badge bpk">Sep 12</span>
-          </div>
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:.4rem">Boutique hotel · Italian dinner</div>
-          <div class="prog-bg"><div class="prog-fill" style="width:30%;background:var(--rose)"></div></div>
-          <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">30% planned</div>
-        </div>
-        <div style="padding:.65rem;background:var(--cream);border-radius:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
-            <div style="font-size:13px;font-weight:500">🌙 Eid al-Adha</div>
-            <span class="badge bt">Jun 6</span>
-          </div>
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:.4rem">Family gathering · Traditional</div>
-          <div class="prog-bg"><div class="prog-fill" style="width:80%;background:var(--teal)"></div></div>
-          <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">80% planned</div>
-        </div>
-      </div>
+      <div class="card-head"><span class="card-title">Upcoming events</span><button class="btn btn-sm btn-ghost" onclick="goTo(document.querySelector('[onclick*=events]'),'events')">See all →</button></div>
+      <div id="dash-events-list"></div>
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><span class="card-title">Quick actions</span></div>
+    <div class="card-head"><span class="card-title">Quick actions</span></div>
     <div style="display:flex;flex-wrap:wrap;gap:.5rem">
-      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=profile]'),'profile')">👤 Edit my profile</button>
-      <button class="ai-chip" onclick="openAddWish()">🎁 Add a wish</button>
-      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=events]'),'events')">🎂 Plan an event</button>
-      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=memories]'),'memories')">📸 Add a memory</button>
-      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=family]'),'family')">👨‍👩‍👧 Invite family</button>
-      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=ai]'),'ai')">✨ Get AI gift ideas ↗</button>
+      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=profile]'),'profile');openEditProfile()">👤 Edit my profile</button>
+      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=wishes]'),'wishes');openAddWish()">🎁 Add a wish</button>
+      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=events]'),'events');openAddEvent()">🎂 Create event board</button>
+      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=memories]'),'memories');openAddMemory()">📸 Add a memory</button>
+      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=family]'),'family');openAddFamily()">👨‍👩‍👧 Invite family</button>
+      <button class="ai-chip" onclick="goTo(document.querySelector('[onclick*=ai]'),'ai')">✨ Get AI ideas ↗</button>
     </div>
   </div>
 </section>
 
 <!-- ── MY PROFILE ── -->
 <section class="page" id="page-profile">
-  <div class="page-header">
+  <div class="page-top">
     <div><h2>My celebration profile</h2><p>Everything your family needs to celebrate you perfectly</p></div>
-    <button class="btn btn-primary btn-sm" onclick="openEditProfile()">✏️ Edit profile</button>
+    <button class="btn btn-primary" onclick="openEditProfile()">✏️ Edit profile</button>
   </div>
-
-  <div class="grid2" style="margin-bottom:0">
+  <div class="g2" style="margin-bottom:0">
     <div>
-      <div class="group-label">Personal details</div>
+      <div class="slabel">Personal details</div>
       <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
-        <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem"><span style="font-size:11px;color:var(--text-muted)">Birthday</span><div id="pf-birthday" style="font-size:13px;font-weight:500;color:var(--text)">July 28 · turning 50</div></div>
-        <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem"><span style="font-size:11px;color:var(--text-muted)">Anniversary</span><div id="pf-anniversary" style="font-size:13px;font-weight:500;color:var(--text)">September 12</div></div>
+        <div class="detail-block" style="flex:1;min-width:130px"><div class="detail-label">Birthday</div><div class="detail-val" id="pf-birthday">July 28 · turning 50</div></div>
+        <div class="detail-block" style="flex:1;min-width:130px"><div class="detail-label">Anniversary</div><div class="detail-val" id="pf-anniversary">September 12</div></div>
       </div>
-      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem">
-        <div style="font-size:11px;color:var(--text-muted);margin-bottom:.35rem">Clothing sizes</div>
-        <div style="display:flex;gap:.75rem;font-size:13px">
+      <div class="detail-block"><div class="detail-label">Clothing sizes</div>
+        <div style="display:flex;gap:1rem;font-size:13px;margin-top:2px">
           <span><strong>Top:</strong> <span id="pf-top">M</span></span>
           <span><strong>Dress:</strong> <span id="pf-dress">8</span></span>
           <span><strong>Shoes:</strong> <span id="pf-shoes">8.5</span></span>
         </div>
       </div>
-      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Jewelry preferences</div><div id="pf-jewelry" style="font-size:13px;color:var(--text)">Gold only · delicate layering pieces · no statement earrings</div></div>
-      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Home décor style</div><div id="pf-decor" style="font-size:13px;color:var(--text)">Mediterranean · warm neutrals · lots of plants</div></div>
-      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Favorite flowers</div><div id="pf-flowers" style="font-size:13px;color:var(--text)">Peonies · garden roses · jasmine</div></div>
-      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.6rem"><div style="font-size:11px;color:var(--text-muted);margin-bottom:3px">Dietary preferences</div><div id="pf-dietary" style="font-size:13px;color:var(--text)">Mediterranean diet · no shellfish</div></div>
+      <div class="detail-block"><div class="detail-label">Jewelry preferences</div><div class="detail-val" id="pf-jewelry">Gold only · delicate layering pieces · no statement earrings</div></div>
+      <div class="detail-block"><div class="detail-label">Home décor style</div><div class="detail-val" id="pf-decor">Mediterranean · warm neutrals · lots of plants</div></div>
+      <div class="detail-block"><div class="detail-label">Favorite flowers</div><div class="detail-val" id="pf-flowers">Peonies · garden roses · jasmine</div></div>
+      <div class="detail-block"><div class="detail-label">Dietary preferences</div><div class="detail-val" id="pf-dietary">Mediterranean diet · no shellfish</div></div>
+      <div class="slabel" style="margin-top:1rem">Charities I love</div>
+      <div id="pf-charities" style="display:flex;flex-wrap:wrap;gap:.4rem">
+        <span class="badge bt" style="padding:4px 12px">❤️ UNICEF</span>
+        <span class="badge bt" style="padding:4px 12px">❤️ Local food bank</span>
+        <span class="badge bt" style="padding:4px 12px">❤️ Women's shelter</span>
+      </div>
     </div>
     <div>
-      <div class="group-label">Celebration wishes</div>
-      <div class="section-card" style="border-left-color:var(--berry)"><div class="sc-header"><span class="sc-emoji">🎂</span><span class="sc-title" style="color:var(--berry)">Birthday Vision Board</span></div><div id="pf-birthday-wish" class="sc-value">Intimate garden party with close family and friends. Mediterranean food, jazz music, dusty rose and sage colors, fairy lights everywhere.</div></div>
-      <div class="section-card" style="border-left-color:var(--rose)"><div class="sc-header"><span class="sc-emoji">💍</span><span class="sc-title" style="color:var(--rose)">Anniversary Dreams</span></div><div id="pf-anniversary-wish" class="sc-value">Overnight at a boutique hotel in Virginia wine country. Italian dinner, couples spa, no phones.</div></div>
-      <div class="section-card" style="border-left-color:var(--teal)"><div class="sc-header"><span class="sc-emoji">🌙</span><span class="sc-title" style="color:var(--teal)">Eid Traditions</span></div><div id="pf-eid" class="sc-value">Full family at our home — all three generations. Matching outfits in earth tones. Mama's biryani, konafa for dessert. Eid envelopes for the children.</div></div>
-      <div class="section-card" style="border-left-color:#C89B5A"><div class="sc-header"><span class="sc-emoji">🌸</span><span class="sc-title" style="color:#7A5C1E">Mother's Day Wishes</span></div><div id="pf-mothersday" class="sc-value">Breakfast made by the family. A walk in the park. Peonies please — not roses. No need for expensive gifts, just your presence.</div></div>
-      <div class="section-card" style="border-left-color:var(--purple)"><div class="sc-header"><span class="sc-emoji">✈️</span><span class="sc-title" style="color:var(--purple)">Travel & Bucket List</span></div><div id="pf-travel" class="sc-value">Amalfi Coast, Japan, Morocco. Dream: a cooking class in Italy and a safari in Kenya.</div></div>
-      <div class="section-card" style="border-left-color:var(--gold)"><div class="sc-header"><span class="sc-emoji">❤️</span><span class="sc-title" style="color:#7A5C1E">My Favorites</span></div><div id="pf-favorites" class="sc-value">Peonies, jazz music, Mediterranean food, gold jewelry, garden settings, hot tea in the morning, long walks.</div></div>
+      <div class="slabel">Celebration wishes</div>
+      <div class="sc" style="border-left-color:var(--berry)"><div class="sc-head"><span class="sc-emoji">❤️</span><span class="sc-title" style="color:var(--berry)">My Favorites</span></div><div class="sc-val" id="pf-favorites">Peonies, jazz music, Mediterranean food, gold jewelry, garden settings, hot tea in the morning, long walks.</div></div>
+      <div class="sc" style="border-left-color:var(--berry)"><div class="sc-head"><span class="sc-emoji">🎂</span><span class="sc-title" style="color:var(--berry)">Birthday Vision Board</span></div><div class="sc-val" id="pf-birthday-wish">Intimate garden party with close family and friends. Mediterranean food, jazz music, dusty rose and sage colors, fairy lights everywhere.</div></div>
+      <div class="sc" style="border-left-color:var(--rose)"><div class="sc-head"><span class="sc-emoji">💍</span><span class="sc-title" style="color:var(--rose)">Anniversary Dreams</span></div><div class="sc-val" id="pf-anniversary-wish">Boutique hotel in Virginia wine country. Italian tasting menu, couples spa, no phones.</div></div>
+      <div class="sc" style="border-left-color:var(--teal)"><div class="sc-head"><span class="sc-emoji">🌙</span><span class="sc-title" style="color:var(--teal)">Eid Traditions</span></div><div class="sc-val" id="pf-eid">Full family at home — all three generations. Matching outfits. Mama's biryani, konafa for dessert. Eid envelopes for the children.</div></div>
+      <div class="sc" style="border-left-color:#B8863C"><div class="sc-head"><span class="sc-emoji">🌸</span><span class="sc-title" style="color:#7A5C1E">Mother's Day Wishes</span></div><div class="sc-val" id="pf-mothersday">Breakfast made by family. A walk in the park. Peonies please. Just your presence matters most.</div></div>
+      <div class="sc" style="border-left-color:var(--purple)"><div class="sc-head"><span class="sc-emoji">✈️</span><span class="sc-title" style="color:var(--purple)">Travel & Bucket List</span></div><div class="sc-val" id="pf-travel">Amalfi Coast, Japan, Morocco. Dream: cooking class in Italy and a safari in Kenya.</div></div>
     </div>
   </div>
-
-  <div class="group-label" style="margin-top:1rem">All 9 profile sections</div>
-  <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem">
-    <span class="badge bpk" style="padding:5px 12px;font-size:12px">❤️ My Favorites</span>
-    <span class="badge bp" style="padding:5px 12px;font-size:12px">🎂 Birthday Vision</span>
-    <span class="badge bpk" style="padding:5px 12px;font-size:12px">💍 Anniversary Dreams</span>
-    <span class="badge bt" style="padding:5px 12px;font-size:12px">🌙 Eid Traditions</span>
-    <span class="badge ba" style="padding:5px 12px;font-size:12px">✈️ Travel Wishlist</span>
-    <span class="badge bp" style="padding:5px 12px;font-size:12px">🎁 Gift Wishlist</span>
-    <span class="badge bg" style="padding:5px 12px;font-size:12px">📸 Family Traditions</span>
-    <span class="badge bg" style="padding:5px 12px;font-size:12px">📝 Letters & Memories</span>
-    <span class="badge bpk" style="padding:5px 12px;font-size:12px">👵 What I Want My Family to Know</span>
-  </div>
-
-  <div class="card" style="border-left:3px solid var(--rose)">
-    <div class="card-header"><span class="card-title">👵 What I want my family to know</span><span class="badge bg">🔒 Private until shared</span></div>
-    <div id="pf-family-msg" style="font-size:13px;color:var(--text-mid);font-style:italic;line-height:1.7">"The most important thing to me isn't the gifts — it's that you show up. Cook for me, sit with me, tell me what I mean to you. That is my celebration."</div>
-  </div>
-
-  <div class="group-label">Charities I'd love donations to</div>
-  <div id="pf-charities" style="display:flex;flex-wrap:wrap;gap:.5rem">
-    <span class="badge bt" style="padding:5px 13px;font-size:12px">❤️ UNICEF</span>
-    <span class="badge bt" style="padding:5px 13px;font-size:12px">❤️ Local food bank</span>
-    <span class="badge bt" style="padding:5px 13px;font-size:12px">❤️ Women's shelter</span>
+  <div class="card" style="border-left:3px solid var(--rose);margin-top:.85rem">
+    <div class="card-head"><span class="card-title">👵 What I want my family to know</span><span class="badge bg">🔒 Private</span></div>
+    <div id="pf-family-msg" style="font-size:13px;color:var(--ink2);font-style:italic;line-height:1.75">"The most important thing to me isn't the gifts — it's that you show up. Cook for me, sit with me, tell me what I mean to you. That is my celebration."</div>
   </div>
 </section>
 
-<!-- ── EDIT PROFILE MODAL ── -->
-<div id="editProfileModal" style="display:none;position:fixed;inset:0;background:rgba(26,10,18,0.55);z-index:1000;overflow-y:auto;padding:2rem 1rem;pointer-events:none">
-  <div style="background:var(--white);border-radius:16px;max-width:680px;margin:0 auto;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--white);z-index:10">
-      <h3 style="font-size:18px;font-family:'Playfair Display',serif">Edit my profile</h3>
-      <div style="display:flex;gap:.6rem">
-        <button class="btn btn-sm" onclick="closeEditProfile()">Cancel</button>
-        <button class="btn btn-primary btn-sm" onclick="saveProfile()">Save changes</button>
-      </div>
-    </div>
-    <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem">
-
-      <!-- Personal -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">Personal details</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem">
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Your name</label><input id="ep-name" value="Sarah Ahmed"></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Birthday</label><input id="ep-birthday" value="July 28 · turning 50"></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Anniversary</label><input id="ep-anniversary" value="September 12"></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Dietary preferences</label><input id="ep-dietary" value="Mediterranean diet · no shellfish"></div>
-        </div>
-      </div>
-
-      <!-- Sizes -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">Clothing sizes</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.65rem">
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Top</label><input id="ep-top" value="M"></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Dress</label><input id="ep-dress" value="8"></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Shoes</label><input id="ep-shoes" value="8.5"></div>
-        </div>
-      </div>
-
-      <!-- Preferences -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">Personal preferences</div>
-        <div style="display:flex;flex-direction:column;gap:.65rem">
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">💍 Jewelry preferences</label><input id="ep-jewelry" value="Gold only · delicate layering pieces · no statement earrings"></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">🏠 Home décor style</label><input id="ep-decor" value="Mediterranean · warm neutrals · lots of plants"></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">🌸 Favorite flowers</label><input id="ep-flowers" value="Peonies · garden roses · jasmine"></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">❤️ My favorites (things that make you happy)</label><textarea id="ep-favorites" rows="2">Peonies, jazz music, Mediterranean food, gold jewelry, garden settings, hot tea in the morning, long walks.</textarea></div>
-        </div>
-      </div>
-
-      <!-- Celebration wishes -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">Celebration wishes</div>
-        <div style="display:flex;flex-direction:column;gap:.65rem">
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">🎂 Birthday wishes — describe your dream birthday</label><textarea id="ep-birthday-wish" rows="3">Intimate garden party with close family and friends. Mediterranean food, jazz music, dusty rose and sage colors, fairy lights everywhere.</textarea></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">💍 Anniversary dreams</label><textarea id="ep-anniversary-wish" rows="2">Overnight at a boutique hotel in Virginia wine country. Italian dinner, couples spa, no phones.</textarea></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">🌸 Mother's Day wishes</label><textarea id="ep-mothersday" rows="2">Breakfast made by the family. A walk in the park. Peonies please — not roses. No need for expensive gifts, just your presence.</textarea></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">🌙 Eid / holiday traditions & ideas</label><textarea id="ep-eid" rows="3">Full family at our home — all three generations. Matching outfits in earth tones. Mama's biryani, konafa for dessert. Eid envelopes for the children.</textarea></div>
-          <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">✈️ Bucket-list experiences & travel destinations</label><textarea id="ep-travel" rows="2">Amalfi Coast, Japan, Morocco. Dream: a cooking class in Italy and a safari in Kenya.</textarea></div>
-        </div>
-      </div>
-
-      <!-- Charities -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">Charities I'd love donations to</div>
-        <div><label style="font-size:12px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px">Comma-separated list</label><input id="ep-charities" value="UNICEF, Local food bank, Women's shelter"></div>
-      </div>
-
-      <!-- Family message -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--berry);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)">👵 What I want my family to know</div>
-        <textarea id="ep-family-msg" rows="3">The most important thing to me isn't the gifts — it's that you show up. Cook for me, sit with me, tell me what I mean to you. That is my celebration.</textarea>
-      </div>
-
-      <div style="display:flex;gap:.6rem;justify-content:flex-end;padding-top:.5rem">
-        <button class="btn" onclick="closeEditProfile()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveProfile()">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- ── WISH LISTS ── -->
 <section class="page" id="page-wishes">
-  <div class="page-header">
-    <div><h2>Wish lists</h2><p>9 categories · each item has photos, links, price, priority, and notes</p></div>
-    <button class="btn btn-primary btn-sm" onclick="openAddWish()">+ Add wish</button>
+  <div class="page-top">
+    <div><h2>Wish lists</h2><p>9 categories · tap any wish to edit or delete it</p></div>
+    <button class="btn btn-primary" onclick="openAddWish()">+ Add wish</button>
   </div>
-
-  <div class="add-form" id="addForm">
-    <div class="form-row full"><input id="wt" placeholder="What do you wish for? (e.g. Weekend spa getaway)"></div>
+  <div class="add-form" id="addWishForm">
+    <div style="font-size:15px;font-family:'Cormorant Garamond',serif;font-weight:600;margin-bottom:.85rem;color:var(--berry)">New wish</div>
+    <div class="form-row one"><label class="fl">What do you wish for? *</label><input id="wi-title" placeholder="e.g. Weekend spa getaway in the mountains"></div>
     <div class="form-row">
-      <select id="wc">
-        <option>Gifts I Want</option><option>Experiences I'd Love</option><option>Restaurants I'd Like to Try</option><option>Home Items</option><option>Jewelry</option><option>Books</option><option>Acts of Service</option><option>Travel</option><option>Charities</option>
-      </select>
-      <select id="wp"><option value="high">High priority</option><option value="med" selected>Medium</option><option value="low">Low</option></select>
+      <div><label class="fl">Category</label>
+        <select id="wi-cat">
+          <option>Gifts I Want</option><option>Experiences I'd Love</option><option>Restaurants I'd Like to Try</option><option>Home Items</option><option>Jewelry</option><option>Books</option><option>Acts of Service</option><option>Travel</option><option>Charities</option>
+        </select>
+      </div>
+      <div><label class="fl">Priority</label>
+        <select id="wi-pri"><option value="h">High</option><option value="m" selected>Medium</option><option value="l">Low</option></select>
+      </div>
     </div>
     <div class="form-row">
-      <input id="wpr" placeholder="Price range (e.g. $50–100)">
-      <input id="wlk" placeholder="Link (optional)">
+      <div><label class="fl">Price range</label><input id="wi-price" placeholder="e.g. $50–100"></div>
+      <div><label class="fl">Link (optional)</label><input id="wi-link" placeholder="https://..."></div>
     </div>
-    <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.25rem">
+    <div class="form-row one"><label class="fl">Notes</label><textarea id="wi-notes" rows="2" placeholder="Size, color, any details..."></textarea></div>
+    <div style="display:flex;gap:.5rem;justify-content:flex-end">
       <button class="btn btn-sm" onclick="closeAddWish()">Cancel</button>
       <button class="btn btn-primary btn-sm" onclick="saveWish()">Save wish</button>
     </div>
   </div>
-
-  <div class="tab-bar" id="wTabs">
-    <button class="tab on" onclick="filterW(this,'all')">All</button>
-    <button class="tab" onclick="filterW(this,'Gifts I Want')">🎁 Gifts</button>
-    <button class="tab" onclick="filterW(this,`Experiences I'd Love`)">✈️ Experiences</button>
-    <button class="tab" onclick="filterW(this,`Restaurants I'd Like to Try`)">🍽️ Restaurants</button>
-    <button class="tab" onclick="filterW(this,'Home Items')">🏠 Home</button>
-    <button class="tab" onclick="filterW(this,'Jewelry')">💍 Jewelry</button>
-    <button class="tab" onclick="filterW(this,'Books')">📚 Books</button>
-    <button class="tab" onclick="filterW(this,'Acts of Service')">❤️ Acts of Service</button>
-    <button class="tab" onclick="filterW(this,'Travel')">🌍 Travel</button>
-    <button class="tab" onclick="filterW(this,'Charities')">🤝 Charities</button>
+  <div class="tabs" id="wishTabs">
+    <button class="tab-btn on" onclick="filterWishes(this,'all')">All</button>
+    <button class="tab-btn" onclick="filterWishes(this,'Gifts I Want')">🎁 Gifts</button>
+    <button class="tab-btn" onclick="filterWishes(this,&quot;Experiences I'd Love&quot;)">✈️ Experiences</button>
+    <button class="tab-btn" onclick="filterWishes(this,&quot;Restaurants I'd Like to Try&quot;)">🍽️ Restaurants</button>
+    <button class="tab-btn" onclick="filterWishes(this,'Home Items')">🏠 Home</button>
+    <button class="tab-btn" onclick="filterWishes(this,'Jewelry')">💍 Jewelry</button>
+    <button class="tab-btn" onclick="filterWishes(this,'Books')">📚 Books</button>
+    <button class="tab-btn" onclick="filterWishes(this,'Acts of Service')">❤️ Acts of Service</button>
+    <button class="tab-btn" onclick="filterWishes(this,'Travel')">🌍 Travel</button>
+    <button class="tab-btn" onclick="filterWishes(this,'Charities')">🤝 Charities</button>
   </div>
-
   <div class="card" id="wishList"></div>
 </section>
 
 <!-- ── EVENT BOARDS ── -->
 <section class="page" id="page-events">
-  <div class="page-header">
-    <div><h2>Event planning boards</h2><p>Pinterest-style vision boards for every milestone</p></div>
-    <button class="btn btn-primary btn-sm">+ New board</button>
+  <div class="page-top">
+    <div><h2>Event planning boards</h2><p>Vision boards for every milestone — click to open and edit</p></div>
+    <button class="btn btn-primary" onclick="openAddEvent()">+ New board</button>
   </div>
-
-  <div class="grid2">
-    <div class="card">
-      <div class="card-header"><span class="card-title">🎂 50th Birthday Dream Celebration</span><span class="badge bp">Jul 28</span></div>
-      <div class="vision-grid">
-        <div class="vision-card"><div class="vc-icon">🏛️</div><div class="vc-label">Venue</div><div class="vc-val">Botanical garden or backyard with fairy lights</div></div>
-        <div class="vision-card"><div class="vc-icon">🎨</div><div class="vc-label">Theme</div><div class="vc-val">Garden party · dusty rose · sage · gold</div></div>
-        <div class="vision-card"><div class="vc-icon">👥</div><div class="vc-label">Guest list</div><div class="vc-val">45 close family & dear friends</div></div>
-        <div class="vision-card"><div class="vc-icon">🍽️</div><div class="vc-label">Food</div><div class="vc-val">Mediterranean catering · mezze spread</div></div>
-        <div class="vision-card"><div class="vc-icon">🎵</div><div class="vc-label">Entertainment</div><div class="vc-val">Jazz trio + Polaroid photo booth</div></div>
-        <div class="vision-card"><div class="vc-icon">🎂</div><div class="vc-label">Cake</div><div class="vc-val">3-tier floral · lemon · gold leaf</div></div>
-      </div>
-      <div class="prog-bg"><div class="prog-fill" style="width:65%"></div></div>
-      <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">65% planned</div>
-    </div>
-
-    <div class="card">
-      <div class="card-header"><span class="card-title">💑 25th Anniversary Dreams</span><span class="badge bpk">Sep 12</span></div>
-      <div class="vision-grid">
-        <div class="vision-card"><div class="vc-icon">🏨</div><div class="vc-label">Setting</div><div class="vc-val">Boutique hotel · Virginia wine country</div></div>
-        <div class="vision-card"><div class="vc-icon">💆</div><div class="vc-label">Spa</div><div class="vc-val">Couples massage before dinner</div></div>
-        <div class="vision-card"><div class="vc-icon">🍝</div><div class="vc-label">Dinner</div><div class="vc-val">Italian tasting menu · wine pairing</div></div>
-        <div class="vision-card"><div class="vc-icon">📸</div><div class="vc-label">Photos</div><div class="vc-val">Couple portraits in hotel garden</div></div>
-        <div class="vision-card"><div class="vc-icon">💍</div><div class="vc-label">Gift wish</div><div class="vc-val">Engraved jewelry or experience upgrade</div></div>
-        <div class="vision-card"><div class="vc-icon">🌹</div><div class="vc-label">Flowers</div><div class="vc-val">Garden roses in cream and blush</div></div>
-      </div>
-      <div class="prog-bg"><div class="prog-fill" style="width:30%;background:var(--rose)"></div></div>
-      <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">30% planned</div>
-    </div>
-
-    <div class="card">
-      <div class="card-header"><span class="card-title">🌙 Eid al-Adha Traditions</span><span class="badge bt">Jun 6</span></div>
-      <div class="vision-grid">
-        <div class="vision-card"><div class="vc-icon">🏠</div><div class="vc-label">Gathering</div><div class="vc-val">Full family · all three generations at home</div></div>
-        <div class="vision-card"><div class="vc-icon">👗</div><div class="vc-label">Outfits</div><div class="vc-val">Matching family · warm earth tones</div></div>
-        <div class="vision-card"><div class="vc-icon">🍛</div><div class="vc-label">Food</div><div class="vc-val">Mama's biryani · lamb · konafa</div></div>
-        <div class="vision-card"><div class="vc-icon">🎁</div><div class="vc-label">Gifts</div><div class="vc-val">Eid envelopes for children · modest gifts for elders</div></div>
-      </div>
-      <div class="prog-bg"><div class="prog-fill" style="width:80%;background:var(--teal)"></div></div>
-      <div style="font-size:10px;color:var(--text-muted);margin-top:.3rem">80% planned</div>
-    </div>
-
-    <div class="add-card">
-      <div>
-        <div class="add-card-icon">✚</div>
-        <div class="add-card-label">Create new event board</div>
-        <div class="add-card-sub">Mother's Day · Graduation · Holiday</div>
-      </div>
-    </div>
-  </div>
+  <div id="events-grid"></div>
 </section>
 
 <!-- ── MEMORY VAULT ── -->
 <section class="page" id="page-memories">
-  <div class="page-header">
+  <div class="page-top">
     <div><h2>Memory vault</h2><p>Preserve what matters for the people you love</p></div>
-    <button class="btn btn-primary btn-sm">+ Add memory</button>
+    <button class="btn btn-primary" onclick="openAddMemory()">+ Add memory</button>
   </div>
-  <div class="tab-bar">
-    <button class="tab on">All</button>
-    <button class="tab">📸 Photos</button>
-    <button class="tab">💌 Letters</button>
-    <button class="tab">🍽️ Recipes</button>
-    <button class="tab">🎄 Traditions</button>
-    <button class="tab">📅 Important dates</button>
+  <div class="tabs" id="memTabs">
+    <button class="tab-btn on" onclick="filterMemories(this,'all')">All</button>
+    <button class="tab-btn" onclick="filterMemories(this,'photo')">📸 Photos</button>
+    <button class="tab-btn" onclick="filterMemories(this,'letter')">💌 Letters</button>
+    <button class="tab-btn" onclick="filterMemories(this,'recipe')">🍽️ Recipes</button>
+    <button class="tab-btn" onclick="filterMemories(this,'tradition')">🎄 Traditions</button>
+    <button class="tab-btn" onclick="filterMemories(this,'date')">📅 Dates</button>
+    <button class="tab-btn" onclick="filterMemories(this,'note')">📝 Notes</button>
   </div>
-  <div class="mem-grid">
-    <div class="mem-card"><div class="mem-icon" style="background:var(--rose-light)">📸</div><div class="mem-title">25th birthday in Cairo</div><div class="mem-sub">1999 · Where our family began</div><div style="margin-top:.5rem"><span class="badge bg" style="font-size:10px">Tradition</span></div></div>
-    <div class="mem-card"><div class="mem-icon" style="background:var(--purple-light)">💌</div><div class="mem-title">Letter to my daughter</div><div class="mem-sub">Opens on her 18th birthday</div><div style="margin-top:.5rem"><span class="badge bp" style="font-size:10px">⏰ Time-locked</span></div></div>
-    <div class="mem-card"><div class="mem-icon" style="background:var(--amber-light)">🍽️</div><div class="mem-title">Mama's Eid biryani</div><div class="mem-sub">Family recipe · 3 generations</div><div style="margin-top:.5rem"><span class="badge ba" style="font-size:10px">Recipe</span></div></div>
-    <div class="mem-card"><div class="mem-icon" style="background:var(--teal-light)">🎄</div><div class="mem-title">Our birthday traditions</div><div class="mem-sub">How we celebrate in this family</div><div style="margin-top:.5rem"><span class="badge bt" style="font-size:10px">Tradition</span></div></div>
-    <div class="mem-card"><div class="mem-icon" style="background:var(--rose-light)">❤️</div><div class="mem-title">What I want my family to know</div><div class="mem-sub">Personal · Private</div><div style="margin-top:.5rem"><span class="badge bpk" style="font-size:10px">🔒 Private</span></div></div>
-    <div class="mem-card"><div class="mem-icon" style="background:var(--purple-light)">📅</div><div class="mem-title">Important family dates</div><div class="mem-sub">Birthdays, anniversaries, milestones</div><div style="margin-top:.5rem"><span class="badge bg" style="font-size:10px">Dates</span></div></div>
-    <div class="add-card" style="min-height:130px"><div><div class="add-card-icon" style="font-size:20px">✚</div><div class="add-card-label">Add memory</div></div></div>
-  </div>
+  <div class="mgrid" id="memoriesGrid"></div>
 </section>
 
 <!-- ── FAMILY ACCESS ── -->
 <section class="page" id="page-family">
-  <div class="page-header">
-    <div><h2>Family access controls</h2><p>You decide exactly who sees what — no guessing games</p></div>
-    <button class="btn btn-primary btn-sm">+ Invite member</button>
+  <div class="page-top">
+    <div><h2>Family access controls</h2><p>You decide exactly who sees what — your family, your rules</p></div>
+    <button class="btn btn-primary" onclick="openAddFamily()">+ Invite member</button>
   </div>
-  <div class="grid2">
+  <div class="g2">
     <div class="card">
-      <div class="card-header"><span class="card-title">Your family members</span></div>
-      <div class="fm-row"><div class="fm-avatar" style="background:var(--rose-light);color:#72243E">JA</div><div style="flex:1"><div class="fm-name">James A. — Husband</div><div class="fm-role">james@email.com</div></div><span class="badge bp">Full access</span></div>
-      <div class="fm-row"><div class="fm-avatar" style="background:var(--teal-light);color:#0F6E56">MA</div><div style="flex:1"><div class="fm-name">Maya A. — Daughter</div><div class="fm-role">Gifts + Events only</div></div><span class="badge bt">Gifts + Events</span></div>
-      <div class="fm-row"><div class="fm-avatar" style="background:var(--purple-light);color:#3C3489">KA</div><div style="flex:1"><div class="fm-name">Khalid A. — Son</div><div class="fm-role">Gift list only</div></div><span class="badge bg">Gifts only</span></div>
-      <div class="fm-row"><div class="fm-avatar" style="background:var(--amber-light);color:#633806">LM</div><div style="flex:1"><div class="fm-name">Layla M. — Sister</div><div class="fm-role">Birthday + holiday wishes</div></div><span class="badge ba">Partial</span></div>
-      <div class="fm-row"><div class="fm-avatar" style="background:var(--rose-light);color:#72243E">NB</div><div style="flex:1"><div class="fm-name">Nadia B. — Best friend</div><div class="fm-role">Party inspiration boards</div></div><span class="badge bpk">Events only</span></div>
-      <div class="fm-row"><div class="fm-avatar" style="background:var(--coral-light);color:#712B13">RM</div><div style="flex:1"><div class="fm-name">Rania M. — Mom</div><div class="fm-role">View only</div></div><span class="badge bc">View only</span></div>
+      <div class="card-head"><span class="card-title">Your family members</span></div>
+      <div id="familyList"></div>
     </div>
     <div class="card">
-      <div class="card-header"><span class="card-title">Access levels</span></div>
-      <div style="display:flex;flex-direction:column;gap:.55rem">
-        <div style="padding:.65rem;background:var(--cream);border-radius:8px"><div style="font-size:12px;font-weight:600;color:var(--berry);margin-bottom:3px">Full access</div><div style="font-size:11px;color:var(--text-muted)">All wishes, events, reminders, memory vault (except private items)</div></div>
-        <div style="padding:.65rem;background:var(--cream);border-radius:8px"><div style="font-size:12px;font-weight:600;color:var(--teal);margin-bottom:3px">Gifts + Events</div><div style="font-size:11px;color:var(--text-muted)">Wish lists and event planning boards</div></div>
-        <div style="padding:.65rem;background:var(--cream);border-radius:8px"><div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:3px">Gifts only</div><div style="font-size:11px;color:var(--text-muted)">Wish lists only — no events or memories</div></div>
-        <div style="padding:.65rem;background:var(--cream);border-radius:8px"><div style="font-size:12px;font-weight:600;color:#7A5C1E;margin-bottom:3px">Partial / custom</div><div style="font-size:11px;color:var(--text-muted)">Choose specific sections — birthday only, Eid only, etc.</div></div>
-        <div style="padding:.65rem;background:var(--cream);border-radius:8px"><div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:3px">View only</div><div style="font-size:11px;color:var(--text-muted)">Read profile — no gift tracker, no private memories</div></div>
+      <div class="card-head"><span class="card-title">Access levels</span></div>
+      <div style="display:flex;flex-direction:column;gap:.5rem">
+        <div class="detail-block"><div class="detail-label" style="color:var(--purple);font-weight:600">Full access</div><div class="detail-val">All wishes, events, reminders, memory vault (except private items)</div></div>
+        <div class="detail-block"><div class="detail-label" style="color:var(--teal);font-weight:600">Gifts + Events</div><div class="detail-val">Wish lists and event planning boards only</div></div>
+        <div class="detail-block"><div class="detail-label" style="font-weight:600">Gifts only</div><div class="detail-val">Wish lists only — no events or memories</div></div>
+        <div class="detail-block"><div class="detail-label" style="color:var(--gold);font-weight:600">Partial / custom</div><div class="detail-val">Choose specific sections — birthday only, Eid only, etc.</div></div>
+        <div class="detail-block"><div class="detail-label" style="font-weight:600">View only</div><div class="detail-val">Read-only profile — no gift tracker access</div></div>
       </div>
-      <div style="margin-top:.85rem;padding:.75rem;border:1px solid var(--border-hover);border-radius:8px">
-        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:.3rem">Your family link</div>
-        <div style="font-size:11px;color:var(--text-muted);margin-bottom:.5rem">Share this so family can view your profile</div>
-        <div style="display:flex;gap:.5rem;align-items:center">
-          <input value="wishkeeper.app/sarah-2026" readonly style="font-size:11px;padding:.35rem .6rem">
-          <button class="btn btn-sm btn-primary" onclick="navigator.clipboard?.writeText('wishkeeper.app/sarah-2026')">Copy</button>
+      <div style="margin-top:.85rem;padding:.85rem;border:1.5px solid var(--border);border-radius:var(--rs)">
+        <div style="font-size:13px;font-weight:600;margin-bottom:.3rem">Your family link</div>
+        <div style="font-size:11px;color:var(--ink3);margin-bottom:.6rem">Share this link so family can view your profile</div>
+        <div style="display:flex;gap:.5rem">
+          <input value="wishkeeper.app/sarah-2026" readonly style="font-size:12px">
+          <button class="btn btn-sm btn-primary" onclick="navigator.clipboard?.writeText('wishkeeper.app/sarah-2026');toast('Link copied!')">Copy</button>
         </div>
       </div>
     </div>
@@ -932,94 +474,76 @@
 
 <!-- ── GIFT TRACKER ── -->
 <section class="page" id="page-gifts">
-  <div class="page-header">
-    <div><h2>Secret gift tracker</h2><p>Family coordinates here — Sarah cannot see this page</p></div>
+  <div class="page-top">
+    <div><h2>Secret gift tracker</h2><p>Family coordinates here — the profile owner cannot see this</p></div>
   </div>
-  <div style="background:#FBF3E3;border:1px solid #C89B5A;border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.75rem">
-    <span style="font-size:18px">🔒</span>
-    <div style="font-size:12px;color:#5A4510;line-height:1.5">Gift reservations and purchase status are hidden from Sarah. Only family members can see this tracker. Prevents duplicate gifts.</div>
+  <div style="background:var(--gold2);border:1.5px solid var(--gold);border-radius:var(--rs);padding:.85rem 1rem;margin-bottom:1rem;display:flex;gap:.75rem;align-items:flex-start">
+    <span style="font-size:18px;flex-shrink:0">🔒</span>
+    <div style="font-size:12px;color:#5A4010;line-height:1.6">Gift reservations and purchase status are hidden from the profile owner. Only family members can see this page — no surprises spoiled!</div>
   </div>
-  <div class="grid3" style="margin-bottom:1rem">
-    <div class="stat"><div class="stat-n">8</div><div class="stat-l">Total wishes</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--teal)">5</div><div class="stat-l">Reserved</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--text-muted)">3</div><div class="stat-l">Available</div></div>
-  </div>
-  <div class="card">
-    <div class="card-header"><span class="card-title">50th Birthday — gift coordination</span></div>
-    <div id="giftItems">
-      <div class="gift-row"><div class="check-box done" onclick="toggleG(this)">✓</div><div style="flex:1"><div style="font-size:13px;color:var(--text-muted);text-decoration:line-through">Louis Vuitton Neverfull tote</div><div style="font-size:11px;color:var(--teal)">Reserved by James · $1,500</div></div><span class="badge bt" style="font-size:10px">Purchased</span></div>
-      <div class="gift-row"><div class="check-box" onclick="toggleG(this)"></div><div style="flex:1"><div style="font-size:13px;color:var(--text)">Weekend in Savannah, GA</div><div style="font-size:11px;color:var(--text-muted)">Experiences · $400–600</div></div><button class="btn btn-sm btn-primary">Reserve</button></div>
-      <div class="gift-row"><div class="check-box done" onclick="toggleG(this)">✓</div><div style="flex:1"><div style="font-size:13px;color:var(--text-muted);text-decoration:line-through">Atomic Habits — James Clear</div><div style="font-size:11px;color:var(--teal)">Reserved by Maya · $18</div></div><span class="badge bt" style="font-size:10px">Purchased</span></div>
-      <div class="gift-row"><div class="check-box" onclick="toggleG(this)"></div><div style="flex:1"><div style="font-size:13px;color:var(--text)">Gold layering necklace — Mejuri</div><div style="font-size:11px;color:var(--text-muted)">Jewelry · $180</div></div><button class="btn btn-sm btn-primary">Reserve</button></div>
-      <div class="gift-row"><div class="check-box done" onclick="toggleG(this)">✓</div><div style="flex:1"><div style="font-size:13px;color:var(--text-muted);text-decoration:line-through">Custom family photo album</div><div style="font-size:11px;color:var(--teal)">Reserved by Layla · $85</div></div><span class="badge bt" style="font-size:10px">Purchased</span></div>
-      <div class="gift-row"><div class="check-box" onclick="toggleG(this)"></div><div style="flex:1"><div style="font-size:13px;color:var(--text)">Spa day at The Ivy Hotel</div><div style="font-size:11px;color:var(--text-muted)">Experiences · $150–200</div></div><button class="btn btn-sm btn-primary">Reserve</button></div>
-    </div>
-    <div style="margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
-      <div style="font-size:12px;color:var(--text-muted)">5 of 8 gifts reserved</div>
-      <div style="font-size:12px;font-weight:500;color:var(--text)">$1,603 reserved of $2,398 total</div>
-    </div>
+  <div class="g3" style="margin-bottom:1rem" id="giftStats"></div>
+  <div class="card" id="giftCard">
+    <div class="card-head"><span class="card-title">50th Birthday — gift coordination</span></div>
+    <div id="giftList"></div>
+    <div style="margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center" id="giftSummary"></div>
   </div>
 </section>
 
 <!-- ── REMINDERS ── -->
 <section class="page" id="page-reminders">
-  <div class="page-header">
-    <div><h2>Reminder system</h2><p>Automatic reminders so your family never misses a milestone</p></div>
-    <button class="btn btn-primary btn-sm">+ Add reminder</button>
+  <div class="page-top">
+    <div><h2>Reminder system</h2><p>Your family never misses a milestone — automatic push and email reminders</p></div>
+    <button class="btn btn-primary" onclick="openAddReminder()">+ Add reminder</button>
   </div>
   <div class="card">
-    <div class="card-header"><span class="card-title">Upcoming celebrations</span></div>
-    <div class="rem-row"><div class="rem-date"><div class="rem-mo">Jun</div><div class="rem-day">6</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">Eid al-Adha — Family gathering</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">25 days away · Notifying family 30, 7, and 1 days before</div></div><button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
-    <div class="rem-row"><div class="rem-date"><div class="rem-mo">Jul</div><div class="rem-day">28</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">Sarah's 50th Birthday 🎂</div><div style="font-size:11px;color:var(--rose);margin-top:2px;font-weight:500">47 days away · Gift reminder active</div></div><button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
-    <div class="rem-row"><div class="rem-date"><div class="rem-mo">Sep</div><div class="rem-day">12</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">25th Wedding Anniversary 💑</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">93 days away · Reminder to James in 60 days</div></div><button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
-    <div class="rem-row"><div class="rem-date"><div class="rem-mo">Nov</div><div class="rem-day">9</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">Mom's Birthday 🎂</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">151 days away</div></div><button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
-    <div class="rem-row"><div class="rem-date"><div class="rem-mo">May</div><div class="rem-day">11</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">Mother's Day 🌸</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Annual · Family notified 2 weeks before</div></div><button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
-    <div class="rem-row"><div class="rem-date"><div class="rem-mo">May</div><div class="rem-day">15</div></div><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">Maya's Graduation 🎓</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">2027 · Saved for future planning</div></div><button class="toggle" onclick="this.classList.toggle('on')" aria-label="Toggle reminder"></button></div>
+    <div class="card-head"><span class="card-title">Upcoming celebrations</span></div>
+    <div id="reminderList"></div>
   </div>
   <div class="card">
-    <div class="card-header"><span class="card-title">Notification schedule</span></div>
-    <div style="font-size:13px;color:var(--text-mid);line-height:2">
+    <div class="card-head"><span class="card-title">Notification schedule</span></div>
+    <div style="font-size:13px;color:var(--ink2);line-height:2.1">
       <strong>Birthdays</strong> — 60 days · 30 days · 7 days · day before<br>
       <strong>Anniversaries</strong> — 30 days · 7 days · day before<br>
       <strong>Eid / holidays</strong> — 14 days · 3 days · day before<br>
-      <strong>Mother's Day / Graduations</strong> — 14 days · 7 days
+      <strong>Mother's Day / Graduations</strong> — 14 days · 7 days<br>
+      <strong>Custom events</strong> — you choose the schedule
     </div>
   </div>
 </section>
 
 <!-- ── AI ASSISTANT ── -->
 <section class="page" id="page-ai">
-  <div class="page-header">
-    <div><h2>AI celebration assistant ✨</h2><p>Personalized ideas based on your wishes, profile, and upcoming events</p></div>
+  <div class="page-top">
+    <div><h2>AI celebration assistant ✨</h2><p>Personalized ideas based on your profile and upcoming events</p></div>
   </div>
   <div class="ai-bubble">
-    <div class="ai-bubble-header">✨ Based on your profile · Sarah's 50th is in 47 days</div>
-    Hi Sarah! You love Mediterranean food, jazz music, gold jewelry, and garden settings. Your anniversary is coming up in September too. Here are ideas tailored just for you — tap any suggestion to get a full response from Claude.
+    <div class="ai-header">✨ Based on your profile</div>
+    Hi! I can see your birthday is coming up soon. You love Mediterranean food, jazz music, gold jewelry, and garden settings. Your anniversary is in September too. Here are tailored ideas — tap any button to get a full response from Claude.
   </div>
-  <div class="grid2">
+  <div class="g2">
     <div class="card">
-      <div class="card-header"><span class="card-title">Gift ideas for your family</span></div>
-      <div class="item-row"><div class="item-icon" style="background:var(--rose-light)">💍</div><div class="item-meta"><div class="item-title">Mejuri demi-fine gold set</div><div class="item-sub">Necklace + ring layering set · ~$280</div></div></div>
-      <div class="item-row"><div class="item-icon" style="background:var(--teal-light)">🌿</div><div class="item-meta"><div class="item-title">Spa day at The Ivy Hotel Baltimore</div><div class="item-sub">Mediterranean-inspired treatments · $175</div></div></div>
-      <div class="item-row"><div class="item-icon" style="background:var(--amber-light)">🌳</div><div class="item-meta"><div class="item-title">Custom fig tree for the garden</div><div class="item-sub">Meaningful, lasting, Mediterranean vibes</div></div></div>
-      <div class="item-row"><div class="item-icon" style="background:var(--purple-light)">📚</div><div class="item-meta"><div class="item-title">"Braiding Sweetgrass" — R. Wall Kimmerer</div><div class="item-sub">Nature + belonging · $16</div></div></div>
+      <div class="card-head"><span class="card-title">Gift ideas for your family</span></div>
+      <div class="row"><div class="row-icon" style="background:var(--rose2)">💍</div><div class="row-meta"><div class="row-title">Mejuri demi-fine gold layering set</div><div class="row-sub">Necklace + ring · ~$280</div></div></div>
+      <div class="row"><div class="row-icon" style="background:var(--teal2)">🌿</div><div class="row-meta"><div class="row-title">Spa day at The Ivy Hotel Baltimore</div><div class="row-sub">Mediterranean-inspired · $175</div></div></div>
+      <div class="row"><div class="row-icon" style="background:var(--gold2)">🌳</div><div class="row-meta"><div class="row-title">Custom fig tree for the garden</div><div class="row-sub">Meaningful, lasting, Mediterranean</div></div></div>
+      <div class="row"><div class="row-icon" style="background:var(--purple2)">📚</div><div class="row-meta"><div class="row-title">Braiding Sweetgrass — R. Wall Kimmerer</div><div class="row-sub">Nature + belonging · $16</div></div></div>
     </div>
     <div class="card">
-      <div class="card-header"><span class="card-title">Eid gift ideas 🌙</span></div>
-      <div class="item-row"><div class="item-icon" style="background:var(--teal-light)">🕯️</div><div class="item-meta"><div class="item-title">Maison Margiela Replica — Oud Minérale</div><div class="item-sub">Middle Eastern-inspired fragrance · $165</div></div></div>
-      <div class="item-row"><div class="item-icon" style="background:var(--amber-light)">🙏</div><div class="item-meta"><div class="item-title">Embroidered luxury prayer rug set</div><div class="item-sub">With matching tasbih · $120</div></div></div>
-      <div class="item-row"><div class="item-icon" style="background:var(--rose-light)">🎁</div><div class="item-meta"><div class="item-title">Curated Eid gift box</div><div class="item-sub">Dates, sweets, incense, self-care items · $85</div></div></div>
+      <div class="card-head"><span class="card-title">Eid gift ideas 🌙</span></div>
+      <div class="row"><div class="row-icon" style="background:var(--teal2)">🕯️</div><div class="row-meta"><div class="row-title">Maison Margiela — Oud Minérale</div><div class="row-sub">Middle Eastern-inspired fragrance · $165</div></div></div>
+      <div class="row"><div class="row-icon" style="background:var(--gold2)">🙏</div><div class="row-meta"><div class="row-title">Embroidered luxury prayer rug set</div><div class="row-sub">With matching tasbih · $120</div></div></div>
+      <div class="row"><div class="row-icon" style="background:var(--rose2)">🎁</div><div class="row-meta"><div class="row-title">Curated Eid gift box</div><div class="row-sub">Dates, sweets, incense, self-care · $85</div></div></div>
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><span class="card-title">Ask the assistant</span></div>
+    <div class="card-head"><span class="card-title">Ask the assistant — tap to send to Claude</span></div>
     <div style="display:flex;flex-wrap:wrap">
       <button class="ai-chip" onclick="sendPrompt('Give me 5 unique 50th birthday party themes for a woman who loves Mediterranean food, jazz, and garden settings')">🎂 Birthday themes ↗</button>
-      <button class="ai-chip" onclick="sendPrompt('Write a heartfelt 50th birthday message from a daughter to her mother who loves nature, family, and travel')">✉️ Write a birthday message ↗</button>
-      <button class="ai-chip" onclick="sendPrompt('What are 10 meaningful 25th anniversary gift ideas that focus on experiences over products?')">💑 Anniversary ideas ↗</button>
+      <button class="ai-chip" onclick="sendPrompt('Write a heartfelt 50th birthday message from a daughter to her mother who loves nature, family, and travel')">✉️ Write birthday message ↗</button>
+      <button class="ai-chip" onclick="sendPrompt('What are 10 meaningful 25th anniversary gift ideas focused on experiences over products?')">💑 Anniversary ideas ↗</button>
       <button class="ai-chip" onclick="sendPrompt('Suggest thoughtful Eid al-Adha gift ideas for a woman in her 50s who loves home décor, fragrance, and wellness')">🌙 Eid gift ideas ↗</button>
-      <button class="ai-chip" onclick="sendPrompt('What are the best bucket-list travel destinations for a woman turning 50 who loves culture, food, and Mediterranean settings?')">✈️ Bucket-list travel ↗</button>
-      <button class="ai-chip" onclick="sendPrompt('Write a personalized Mother\'s Day card from children to their mother who values family traditions, Eid gatherings, and quiet mornings')">🌸 Mother's Day card ↗</button>
+      <button class="ai-chip" onclick="sendPrompt('Best bucket-list travel destinations for a woman turning 50 who loves culture, food, and Mediterranean settings')">✈️ Bucket-list travel ↗</button>
+      <button class="ai-chip" onclick="sendPrompt(&quot;Write a Mother's Day card from children to their mother who values family traditions, Eid gatherings, and quiet mornings&quot;)">🌸 Mother's Day card ↗</button>
     </div>
   </div>
 </section>
@@ -1027,157 +551,730 @@
 </main>
 </div>
 
+<!-- ══ MODALS ══ -->
+
+<!-- Edit Profile -->
+<div class="modal-overlay" id="editProfileOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3>Edit my profile</h3><button class="btn btn-sm" onclick="closeModal('editProfileOverlay')">✕ Close</button></div>
+    <div class="modal-body">
+      <div class="modal-section">Personal details</div>
+      <div class="form-row"><div class="field"><label>Your name</label><input id="ep-name" value="Sarah Ahmed"></div><div class="field"><label>Birthday</label><input id="ep-birthday" value="July 28 · turning 50"></div></div>
+      <div class="form-row"><div class="field"><label>Anniversary</label><input id="ep-anniversary" value="September 12"></div><div class="field"><label>Dietary preferences</label><input id="ep-dietary" value="Mediterranean diet · no shellfish"></div></div>
+      <div class="modal-section">Clothing sizes</div>
+      <div class="form-row three"><div class="field"><label>Top</label><input id="ep-top" value="M"></div><div class="field"><label>Dress</label><input id="ep-dress" value="8"></div><div class="field"><label>Shoes</label><input id="ep-shoes" value="8.5"></div></div>
+      <div class="modal-section">Preferences</div>
+      <div class="field"><label>💍 Jewelry preferences</label><input id="ep-jewelry" value="Gold only · delicate layering pieces · no statement earrings"></div>
+      <div class="field"><label>🏠 Home décor style</label><input id="ep-decor" value="Mediterranean · warm neutrals · lots of plants"></div>
+      <div class="field"><label>🌸 Favorite flowers</label><input id="ep-flowers" value="Peonies · garden roses · jasmine"></div>
+      <div class="field"><label>❤️ My favorites (things that make me happy)</label><textarea id="ep-favorites">Peonies, jazz music, Mediterranean food, gold jewelry, garden settings, hot tea in the morning, long walks.</textarea></div>
+      <div class="modal-section">Celebration wishes</div>
+      <div class="field"><label>🎂 Birthday wishes — describe your dream birthday</label><textarea id="ep-birthday-wish">Intimate garden party with close family and friends. Mediterranean food, jazz music, dusty rose and sage colors, fairy lights everywhere.</textarea></div>
+      <div class="field"><label>💍 Anniversary dreams</label><textarea id="ep-anniversary-wish">Boutique hotel in Virginia wine country. Italian tasting menu, couples spa, no phones.</textarea></div>
+      <div class="field"><label>🌸 Mother's Day wishes</label><textarea id="ep-mothersday">Breakfast made by family. A walk in the park. Peonies please. Just your presence matters most.</textarea></div>
+      <div class="field"><label>🌙 Eid / holiday traditions & ideas</label><textarea id="ep-eid">Full family at home — all three generations. Matching outfits. Mama's biryani, konafa for dessert. Eid envelopes for the children.</textarea></div>
+      <div class="field"><label>✈️ Bucket-list experiences & travel destinations</label><textarea id="ep-travel">Amalfi Coast, Japan, Morocco. Dream: cooking class in Italy and a safari in Kenya.</textarea></div>
+      <div class="modal-section">Charities & family message</div>
+      <div class="field"><label>❤️ Charities I'd love donations to (comma-separated)</label><input id="ep-charities" value="UNICEF, Local food bank, Women's shelter"></div>
+      <div class="field"><label>👵 What I want my family to know</label><textarea id="ep-family-msg">The most important thing to me isn't the gifts — it's that you show up. Cook for me, sit with me, tell me what I mean to you. That is my celebration.</textarea></div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal('editProfileOverlay')">Cancel</button><button class="btn btn-primary" onclick="saveProfile()">Save changes</button></div>
+  </div>
+</div>
+
+<!-- Add Event -->
+<div class="modal-overlay" id="addEventOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3 id="eventModalTitle">New event board</h3><button class="btn btn-sm" onclick="closeModal('addEventOverlay')">✕ Close</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="ev-id">
+      <div class="modal-section">Event details</div>
+      <div class="field"><label>Event name *</label><input id="ev-name" placeholder="e.g. 50th Birthday Dream Celebration"></div>
+      <div class="form-row">
+        <div class="field"><label>Type</label>
+          <select id="ev-type">
+            <option value="birthday">🎂 Birthday</option><option value="anniversary">💑 Anniversary</option><option value="eid">🌙 Eid</option><option value="mothersday">🌸 Mother's Day</option><option value="graduation">🎓 Graduation</option><option value="holiday">🎁 Holiday</option><option value="other">🎉 Other</option>
+          </select>
+        </div>
+        <div class="field"><label>Date</label><input id="ev-date" type="date"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Theme</label><input id="ev-theme" placeholder="e.g. Garden party"></div>
+        <div class="field"><label>Guest count</label><input id="ev-guests" type="number" placeholder="45"></div>
+      </div>
+      <div class="modal-section">Vision board details</div>
+      <div class="field"><label>🏛️ Venue ideas</label><input id="ev-venue" placeholder="e.g. Botanical garden or backyard"></div>
+      <div class="field"><label>🌈 Color palette (comma-separated)</label><input id="ev-colors" placeholder="dusty rose, sage, gold"></div>
+      <div class="field"><label>🍽️ Food preferences</label><input id="ev-food" placeholder="e.g. Mediterranean catering, mezze spread"></div>
+      <div class="field"><label>🎵 Entertainment</label><input id="ev-ent" placeholder="e.g. Jazz trio + Polaroid photo booth"></div>
+      <div class="field"><label>🎂 Cake description</label><input id="ev-cake" placeholder="e.g. 3-tier floral, lemon, gold leaf details"></div>
+      <div class="field"><label>📝 Notes & vision</label><textarea id="ev-notes" placeholder="Describe how you want this celebration to feel..."></textarea></div>
+      <div class="field"><label>Planning progress: <span id="ev-prog-label">0</span>%</label><input type="range" id="ev-prog" min="0" max="100" value="0" oninput="document.getElementById('ev-prog-label').textContent=this.value" style="padding:0;border:none;background:none;box-shadow:none"></div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal('addEventOverlay')">Cancel</button><button class="btn btn-primary" onclick="saveEvent()">Save event board</button></div>
+  </div>
+</div>
+
+<!-- Add Memory -->
+<div class="modal-overlay" id="addMemoryOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3 id="memModalTitle">Add to memory vault</h3><button class="btn btn-sm" onclick="closeModal('addMemoryOverlay')">✕ Close</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="mem-id">
+      <div class="modal-section">Memory details</div>
+      <div class="field"><label>Title *</label><input id="mem-title" placeholder="e.g. Letter to my daughter, Mama's Eid biryani recipe"></div>
+      <div class="form-row">
+        <div class="field"><label>Type</label>
+          <select id="mem-type">
+            <option value="photo">📸 Photo / Memory</option><option value="letter">💌 Letter</option><option value="recipe">🍽️ Recipe</option><option value="tradition">🎄 Tradition</option><option value="date">📅 Important date</option><option value="note">📝 Note</option>
+          </select>
+        </div>
+        <div class="field"><label>Privacy</label>
+          <select id="mem-private"><option value="no">Shared with family</option><option value="yes">Private (only me)</option></select>
+        </div>
+      </div>
+      <div class="field"><label>Content</label><textarea id="mem-content" rows="5" placeholder="Write your memory, recipe, letter, or note here..."></textarea></div>
+      <div class="field" id="mem-unlock-field" style="display:none"><label>⏰ Time-lock — unlock on date</label><input id="mem-unlock" type="date"><div style="font-size:11px;color:var(--ink3);margin-top:4px">Letter reveals itself to family on this date</div></div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal('addMemoryOverlay')">Cancel</button><button class="btn btn-primary" onclick="saveMemory()">Save memory</button></div>
+  </div>
+</div>
+
+<!-- Add Family Member -->
+<div class="modal-overlay" id="addFamilyOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3>Invite family member</h3><button class="btn btn-sm" onclick="closeModal('addFamilyOverlay')">✕ Close</button></div>
+    <div class="modal-body">
+      <div class="modal-section">Their details</div>
+      <div class="form-row"><div class="field"><label>Name *</label><input id="fm-name" placeholder="e.g. James"></div><div class="field"><label>Email *</label><input id="fm-email" placeholder="their@email.com" type="email"></div></div>
+      <div class="form-row">
+        <div class="field"><label>Relationship</label>
+          <select id="fm-role"><option value="spouse">Spouse / Partner</option><option value="child">Child</option><option value="parent">Parent</option><option value="sibling">Sibling</option><option value="friend">Friend</option><option value="other">Other</option></select>
+        </div>
+        <div class="field"><label>Access level</label>
+          <select id="fm-access"><option value="full">Full access</option><option value="gifts_events">Gifts + Events</option><option value="gifts">Gifts only</option><option value="events">Events only</option><option value="view">View only</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal('addFamilyOverlay')">Cancel</button><button class="btn btn-primary" onclick="saveFamilyMember()">Send invite</button></div>
+  </div>
+</div>
+
+<!-- Add Reminder -->
+<div class="modal-overlay" id="addReminderOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3>Add reminder</h3><button class="btn btn-sm" onclick="closeModal('addReminderOverlay')">✕ Close</button></div>
+    <div class="modal-body">
+      <div class="modal-section">Reminder details</div>
+      <div class="field"><label>Name *</label><input id="rem-name" placeholder="e.g. Sarah's 50th Birthday"></div>
+      <div class="form-row"><div class="field"><label>Date *</label><input id="rem-date" type="date"></div><div class="field"><label>Type</label><select id="rem-type"><option value="birthday">🎂 Birthday</option><option value="anniversary">💑 Anniversary</option><option value="eid">🌙 Eid / Holiday</option><option value="mothersday">🌸 Mother's Day</option><option value="graduation">🎓 Graduation</option><option value="other">Other</option></select></div></div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal('addReminderOverlay')">Cancel</button><button class="btn btn-primary" onclick="saveReminder()">Save reminder</button></div>
+  </div>
+</div>
+
+<!-- View Event Board -->
+<div class="modal-overlay" id="viewEventOverlay">
+  <div class="modal" style="max-width:720px">
+    <div class="modal-head" id="viewEventHead"><h3 id="ve-title">Event Board</h3><div style="display:flex;gap:.5rem"><button class="btn btn-sm" onclick="editCurrentEvent()">✏️ Edit</button><button class="btn btn-sm btn-danger" onclick="deleteCurrentEvent()">Delete</button><button class="btn btn-sm" onclick="closeModal('viewEventOverlay')">✕</button></div></div>
+    <div class="modal-body" id="viewEventBody"></div>
+  </div>
+</div>
+
+<!-- View Memory -->
+<div class="modal-overlay" id="viewMemoryOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3 id="vm-title">Memory</h3><div style="display:flex;gap:.5rem"><button class="btn btn-sm" onclick="editCurrentMemory()">✏️ Edit</button><button class="btn btn-sm btn-danger" onclick="deleteCurrentMemory()">Delete</button><button class="btn btn-sm" onclick="closeModal('viewMemoryOverlay')">✕</button></div></div>
+    <div class="modal-body" id="viewMemoryBody"></div>
+  </div>
+</div>
+
 <script>
-const CAT_ICON = {'Gifts I Want':'🎁','Experiences I\'d Love':'✈️','Restaurants I\'d Like to Try':'🍽️','Home Items':'🏠','Jewelry':'💍','Books':'📚','Acts of Service':'❤️','Travel':'🌍','Charities':'🤝'};
-const CAT_BG   = {'Gifts I Want':'#EEEDFE','Experiences I\'d Love':'#E1F5EE','Restaurants I\'d Like to Try':'#FAEEDA','Home Items':'#FAECE7','Jewelry':'#FBEAF0','Books':'#EEEDFE','Acts of Service':'#FBEAF0','Travel':'#E1F5EE','Charities':'#E1F5EE'};
-const CAT_BADGE= {'Gifts I Want':'bp','Experiences I\'d Love':'bt','Restaurants I\'d Like to Try':'ba','Home Items':'bc','Jewelry':'bpk','Books':'bp','Acts of Service':'bpk','Travel':'bt','Charities':'bt'};
+// ══════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════
+const WISH_ICON={'Gifts I Want':'🎁',"Experiences I'd Love":'✈️',"Restaurants I'd Like to Try":'🍽️','Home Items':'🏠','Jewelry':'💍','Books':'📚','Acts of Service':'❤️','Travel':'🌍','Charities':'🤝'};
+const WISH_BG={'Gifts I Want':'#EEEDFE',"Experiences I'd Love":'#E0F5EE',"Restaurants I'd Like to Try":'#FAEEDA','Home Items':'#FAECE7','Jewelry':'#FBEAF0','Books':'#EEEDFE','Acts of Service':'#FBEAF0','Travel':'#E0F5EE','Charities':'#E0F5EE'};
+const WISH_BADGE={'Gifts I Want':'bp',"Experiences I'd Love":'bt',"Restaurants I'd Like to Try":'ba','Home Items':'bg','Jewelry':'bpk','Books':'bp','Acts of Service':'bpk','Travel':'bt','Charities':'bt'};
+const EVENT_EMOJI={birthday:'🎂',anniversary:'💑',eid:'🌙',mothersday:'🌸',graduation:'🎓',holiday:'🎁',other:'🎉'};
+const MEM_ICON={photo:'📸',letter:'💌',recipe:'🍽️',tradition:'🎄',date:'📅',note:'📝'};
+const MEM_BG={photo:'#FBEAF0',letter:'#EEEDFE',recipe:'#FAEEDA',tradition:'#E0F5EE',date:'#E0F5EE',note:'#F1EFE8'};
+const ACCESS_LABEL={full:'Full access',gifts_events:'Gifts + Events',gifts:'Gifts only',events:'Events only',view:'View only'};
+const ACCESS_BADGE={full:'bp',gifts_events:'bt',gifts:'bg',events:'bpk',view:'bg'};
+const ROLE_LABEL={spouse:'Spouse',child:'Child',parent:'Parent',sibling:'Sibling',friend:'Friend',other:'Other'};
+
+let uid = () => Math.random().toString(36).slice(2,9);
 
 let wishes = [
-  {title:'Louis Vuitton Neverfull tote',cat:'Gifts I Want',pri:'high',price:'$1,500',link:'lv.com'},
-  {title:'Weekend in Savannah, GA',cat:"Experiences I'd Love",pri:'high',price:'$400–600',link:''},
-  {title:'Dinner at Nobu Baltimore',cat:"Restaurants I'd Like to Try",pri:'high',price:'',link:''},
-  {title:'Gold layering necklace — Mejuri',cat:'Jewelry',pri:'med',price:'$180',link:'mejuri.com'},
-  {title:'Atomic Habits — James Clear',cat:'Books',pri:'med',price:'$18',link:''},
-  {title:'Cook me breakfast in bed',cat:'Acts of Service',pri:'high',price:'',link:''},
-  {title:'Amalfi Coast trip 2027',cat:'Travel',pri:'med',price:'$3,000+',link:''},
-  {title:'Custom ottoman for living room',cat:'Home Items',pri:'low',price:'$300',link:''},
-  {title:'Donation to local women\'s shelter',cat:'Charities',pri:'med',price:'Any amount',link:''},
+  {id:uid(),title:'Louis Vuitton Neverfull tote',cat:'Gifts I Want',pri:'h',price:'$1,500',link:'lv.com',notes:''},
+  {id:uid(),title:'Weekend in Savannah, GA',cat:"Experiences I'd Love",pri:'h',price:'$400–600',link:'',notes:''},
+  {id:uid(),title:'Dinner at Nobu Baltimore',cat:"Restaurants I'd Like to Try",pri:'h',price:'',link:'',notes:'Michelin-starred · love omakase'},
+  {id:uid(),title:'Gold layering necklace — Mejuri',cat:'Jewelry',pri:'m',price:'$180',link:'mejuri.com',notes:'Gold only, delicate'},
+  {id:uid(),title:'Atomic Habits — James Clear',cat:'Books',pri:'m',price:'$18',link:'',notes:''},
+  {id:uid(),title:'Cook me breakfast in bed',cat:'Acts of Service',pri:'h',price:'',link:'',notes:'Eggs benedict and peonies please'},
+  {id:uid(),title:'Amalfi Coast trip 2027',cat:'Travel',pri:'m',price:'$3,000+',link:'',notes:''},
+  {id:uid(),title:'Custom ottoman for living room',cat:'Home Items',pri:'l',price:'$300',link:'',notes:'Warm tone, velvet or boucle'},
+  {id:uid(),title:"Donation to local women's shelter",cat:'Charities',pri:'m',price:'Any amount',link:'',notes:''},
 ];
-let wFilter = 'all';
 
-function openEditProfile() {
-  const m = document.getElementById('editProfileModal');
-  m.style.display = 'block';
-  m.style.pointerEvents = 'auto';
-  document.body.style.overflow = 'hidden';
+let events = [
+  {id:uid(),name:'50th Birthday Dream Celebration',type:'birthday',date:'2026-07-28',theme:'Garden party · dusty rose · sage · gold',venue:'Botanical garden or backyard with fairy lights',guests:45,colors:'dusty rose, sage, gold',food:'Mediterranean catering · mezze spread',ent:'Jazz trio + Polaroid photo booth',cake:'3-tier floral · lemon · gold leaf details',notes:'Intimate and beautiful. Make me feel celebrated.',prog:65},
+  {id:uid(),name:'25th Anniversary Dreams',type:'anniversary',date:'2026-09-12',theme:'Romantic Italian evening',venue:'Boutique hotel · Virginia wine country',guests:2,colors:'cream, blush, candlelight',food:'Italian tasting menu · wine pairing',ent:'Couples portraits in hotel garden',cake:'',notes:'Overnight stay. No phones. Just us.',prog:30},
+  {id:uid(),name:'Eid al-Adha Celebration',type:'eid',date:'2026-06-06',theme:'Traditional family gathering',venue:'Our home — all three generations',guests:25,colors:'earth tones, emerald, gold',food:"Mama's biryani, lamb, konafa for dessert",ent:'Family photos in matching outfits',cake:'',notes:'Eid envelopes for the children.',prog:80},
+];
+
+let memories = [
+  {id:uid(),title:'25th birthday in Cairo',type:'photo',content:"Where our family began. The most magical summer of my life.",priv:false,unlock:''},
+  {id:uid(),title:'Letter to my daughter',type:'letter',content:"My darling Maya, by the time you read this...",priv:true,unlock:'2030-08-14'},
+  {id:uid(),title:"Mama's Eid biryani",type:'recipe',content:"3 cups basmati rice, soaked 30 mins. Layer with slow-cooked lamb and caramelized onions. Saffron milk poured over top. Steam for 20 minutes.",priv:false,unlock:''},
+  {id:uid(),title:'Our birthday traditions',type:'tradition',content:"In our family, the birthday person chooses everything: breakfast, dinner, activity. No compromises. That day belongs to them.",priv:false,unlock:''},
+  {id:uid(),title:'What I want my family to know',type:'note',content:"Show up. That is everything.",priv:true,unlock:''},
+  {id:uid(),title:'Important family dates',type:'date',content:"James: March 5. Maya: August 14. Khalid: November 22. Mom: November 9. Dad: April 3.",priv:false,unlock:''},
+];
+
+let family = [
+  {id:uid(),name:'James A.',email:'james@email.com',role:'spouse',access:'full'},
+  {id:uid(),name:'Maya A.',email:'maya@email.com',role:'child',access:'gifts_events'},
+  {id:uid(),name:'Khalid A.',email:'khalid@email.com',role:'child',access:'gifts'},
+  {id:uid(),name:'Layla M.',email:'layla@email.com',role:'sibling',access:'gifts_events'},
+  {id:uid(),name:'Nadia B.',email:'nadia@email.com',role:'friend',access:'events'},
+  {id:uid(),name:'Rania M.',email:'rania@email.com',role:'parent',access:'view'},
+];
+
+let gifts = [
+  {id:uid(),title:'Louis Vuitton Neverfull tote',price:'$1,500',done:true,by:'James'},
+  {id:uid(),title:'Weekend in Savannah, GA',price:'$500',done:false,by:''},
+  {id:uid(),title:'Atomic Habits — James Clear',price:'$18',done:true,by:'Maya'},
+  {id:uid(),title:'Gold layering necklace — Mejuri',price:'$180',done:false,by:''},
+  {id:uid(),title:'Custom family photo album',price:'$85',done:true,by:'Layla'},
+  {id:uid(),title:'Spa day at The Ivy Hotel',price:'$175',done:false,by:''},
+];
+
+let reminders = [
+  {id:uid(),name:"Eid al-Adha — Family gathering",date:'2026-06-06',type:'eid',on:true},
+  {id:uid(),name:"Sarah's 50th Birthday",date:'2026-07-28',type:'birthday',on:true},
+  {id:uid(),name:"25th Wedding Anniversary",date:'2026-09-12',type:'anniversary',on:true},
+  {id:uid(),name:"Mom's Birthday",date:'2026-11-09',type:'birthday',on:true},
+  {id:uid(),name:"Mother's Day",date:'2027-05-11',type:'mothersday',on:true},
+  {id:uid(),name:"Maya's Graduation",date:'2027-05-15',type:'graduation',on:false},
+];
+
+let wishFilter='all';
+let memFilter='all';
+let currentEventId=null;
+let currentMemoryId=null;
+
+// ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
+function goTo(el,id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  window.scrollTo(0,0);
+  // close mobile sidebar
+  document.getElementById('sidebar').classList.remove('open');
+  // render
+  if(id==='dash') renderDash();
+  if(id==='wishes') renderWishes();
+  if(id==='events') renderEvents();
+  if(id==='memories') renderMemories();
+  if(id==='family') renderFamily();
+  if(id==='gifts') renderGifts();
+  if(id==='reminders') renderReminders();
 }
 
-function closeEditProfile() {
-  const m = document.getElementById('editProfileModal');
-  m.style.display = 'none';
-  m.style.pointerEvents = 'none';
-  document.body.style.overflow = '';
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
 }
 
-function saveProfile() {
-  // Personal details
-  document.getElementById('pf-birthday').textContent = document.getElementById('ep-birthday').value;
-  document.getElementById('pf-anniversary').textContent = document.getElementById('ep-anniversary').value;
-  document.getElementById('pf-top').textContent = document.getElementById('ep-top').value;
-  document.getElementById('pf-dress').textContent = document.getElementById('ep-dress').value;
-  document.getElementById('pf-shoes').textContent = document.getElementById('ep-shoes').value;
-  document.getElementById('pf-jewelry').textContent = document.getElementById('ep-jewelry').value;
-  document.getElementById('pf-decor').textContent = document.getElementById('ep-decor').value;
-  document.getElementById('pf-flowers').textContent = document.getElementById('ep-flowers').value;
-  document.getElementById('pf-dietary').textContent = document.getElementById('ep-dietary').value;
-  document.getElementById('pf-favorites').textContent = document.getElementById('ep-favorites').value;
-
-  // Celebration wishes
-  document.getElementById('pf-birthday-wish').textContent = document.getElementById('ep-birthday-wish').value;
-  document.getElementById('pf-anniversary-wish').textContent = document.getElementById('ep-anniversary-wish').value;
-  document.getElementById('pf-mothersday').textContent = document.getElementById('ep-mothersday').value;
-  document.getElementById('pf-eid').textContent = document.getElementById('ep-eid').value;
-  document.getElementById('pf-travel').textContent = document.getElementById('ep-travel').value;
-
-  // Family message
-  document.getElementById('pf-family-msg').textContent = '"' + document.getElementById('ep-family-msg').value + '"';
-
-  // Charities
-  const charities = document.getElementById('ep-charities').value
-    .split(',').map(c => c.trim()).filter(Boolean);
-  document.getElementById('pf-charities').innerHTML = charities
-    .map(c => `<span class="badge bt" style="padding:5px 13px;font-size:12px">❤️ ${c}</span>`)
-    .join('');
-
-  // Update dashboard greeting name
-  const name = document.getElementById('ep-name').value.split(' ')[0];
-  const greet = document.querySelector('#page-dash h2');
-  if (greet) greet.textContent = `Welcome back, ${name} ✨`;
-
-  // Update sidebar footer name
-  const footerName = document.querySelector('.sidebar-footer-name');
-  if (footerName) footerName.textContent = document.getElementById('ep-name').value;
-
-  closeEditProfile();
-
-  // Flash a saved confirmation
-  const btn = document.querySelector('#page-profile .btn-primary');
-  if (btn) { btn.textContent = '✓ Saved!'; setTimeout(() => btn.textContent = '✏️ Edit profile', 2000); }
+// ══════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.display='block';
+  setTimeout(()=>t.style.display='none',2500);
 }
 
-// Close modal if clicking outside it
-document.addEventListener('click', function(e) {
-  const modal = document.getElementById('editProfileModal');
-  if (e.target === modal) closeEditProfile();
+// ══════════════════════════════════════════════
+// MODAL HELPERS
+// ══════════════════════════════════════════════
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.addEventListener('click',e=>{
+  document.querySelectorAll('.modal-overlay.open').forEach(m=>{
+    if(e.target===m) m.classList.remove('open');
+  });
 });
 
-
-  const el = document.getElementById('wishList');
-  const list = wFilter === 'all' ? wishes : wishes.filter(w => w.cat === wFilter);
-  if (!list.length) { el.innerHTML = '<div style="text-align:center;padding:1.5rem;color:#9A8090;font-size:13px;font-style:italic">No wishes in this category yet</div>'; return; }
-  el.innerHTML = list.map(w => `
-    <div class="item-row">
-      <div class="item-icon" style="background:${CAT_BG[w.cat]||'#EEEDFE'}">${CAT_ICON[w.cat]||'🎁'}</div>
-      <div class="item-meta">
-        <div class="item-title">${w.title}</div>
-        <div class="item-sub">${w.cat}${w.price?' · '+w.price:''}${w.link?' · <a href="#" style="color:#534AB7">'+w.link+'</a>':''}</div>
-      </div>
-      <span class="badge ${CAT_BADGE[w.cat]||'bg'}" style="margin-right:6px;font-size:10px">${w.cat.split(' ')[0]}</span>
-      <div class="priority-dot ${w.pri==='high'?'dot-h':w.pri==='med'?'dot-m':'dot-l'}"></div>
-    </div>`).join('');
+// ══════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════
+function renderDash(){
+  document.getElementById('ds-wishes').textContent=wishes.length;
+  document.getElementById('ds-family').textContent=family.length;
+  document.getElementById('ds-events').textContent=events.length;
+  document.getElementById('ds-reserved').textContent=gifts.filter(g=>g.done).length;
+  // Top wishes
+  const topW=wishes.filter(w=>w.pri==='h').slice(0,4);
+  document.getElementById('dash-wishes-list').innerHTML = topW.length
+    ? topW.map(w=>`<div class="row"><div class="row-icon" style="background:${WISH_BG[w.cat]||'#eee'}">${WISH_ICON[w.cat]||'🎁'}</div><div class="row-meta"><div class="row-title">${w.title}</div><div class="row-sub">${w.cat}${w.price?' · '+w.price:''}</div></div><div class="pdot ph"></div></div>`).join('')
+    : '<div style="padding:1rem;text-align:center;color:var(--ink3);font-style:italic;font-size:13px">Add your first wish →</div>';
+  // Events
+  const upcoming=events.slice(0,3);
+  document.getElementById('dash-events-list').innerHTML = upcoming.length
+    ? upcoming.map(ev=>`<div style="padding:.65rem;background:var(--cream2);border-radius:8px;margin-bottom:.5rem"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem"><div style="font-size:13px;font-weight:500">${EVENT_EMOJI[ev.type]} ${ev.name}</div><span class="badge bg" style="font-size:10px">${ev.date}</span></div>${ev.theme?`<div style="font-size:11px;color:var(--ink3);margin-bottom:.4rem">${ev.theme}</div>`:''}div class="prog-bg"><div class="prog-fill" style="width:${ev.prog}%"></div></div><div style="font-size:10px;color:var(--ink3);margin-top:.3rem">${ev.prog}% planned</div></div>`).join('').replace('div class','<div class')
+    : '<div style="padding:1rem;text-align:center;color:var(--ink3);font-style:italic;font-size:13px">Create your first event board →</div>';
 }
 
-function filterW(el, cat) {
-  wFilter = cat;
-  document.querySelectorAll('#wTabs .tab').forEach(t => t.classList.remove('on'));
+// ══════════════════════════════════════════════
+// PROFILE
+// ══════════════════════════════════════════════
+function openEditProfile(){openModal('editProfileOverlay')}
+
+function saveProfile(){
+  document.getElementById('pf-birthday').textContent=document.getElementById('ep-birthday').value;
+  document.getElementById('pf-anniversary').textContent=document.getElementById('ep-anniversary').value;
+  document.getElementById('pf-top').textContent=document.getElementById('ep-top').value;
+  document.getElementById('pf-dress').textContent=document.getElementById('ep-dress').value;
+  document.getElementById('pf-shoes').textContent=document.getElementById('ep-shoes').value;
+  document.getElementById('pf-jewelry').textContent=document.getElementById('ep-jewelry').value;
+  document.getElementById('pf-decor').textContent=document.getElementById('ep-decor').value;
+  document.getElementById('pf-flowers').textContent=document.getElementById('ep-flowers').value;
+  document.getElementById('pf-dietary').textContent=document.getElementById('ep-dietary').value;
+  document.getElementById('pf-favorites').textContent=document.getElementById('ep-favorites').value;
+  document.getElementById('pf-birthday-wish').textContent=document.getElementById('ep-birthday-wish').value;
+  document.getElementById('pf-anniversary-wish').textContent=document.getElementById('ep-anniversary-wish').value;
+  document.getElementById('pf-mothersday').textContent=document.getElementById('ep-mothersday').value;
+  document.getElementById('pf-eid').textContent=document.getElementById('ep-eid').value;
+  document.getElementById('pf-travel').textContent=document.getElementById('ep-travel').value;
+  document.getElementById('pf-family-msg').textContent='"'+document.getElementById('ep-family-msg').value+'"';
+  const charities=document.getElementById('ep-charities').value.split(',').map(c=>c.trim()).filter(Boolean);
+  document.getElementById('pf-charities').innerHTML=charities.map(c=>`<span class="badge bt" style="padding:4px 12px">❤️ ${c}</span>`).join('');
+  const firstName=document.getElementById('ep-name').value.split(' ')[0];
+  document.getElementById('dash-greeting').textContent=`Welcome back, ${firstName} ✨`;
+  document.getElementById('sidebarName').textContent=document.getElementById('ep-name').value;
+  document.getElementById('sidebarAvatar').textContent=document.getElementById('ep-name').value.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  closeModal('editProfileOverlay');
+  toast('Profile saved ✓');
+}
+
+// ══════════════════════════════════════════════
+// WISHES
+// ══════════════════════════════════════════════
+function openAddWish(){document.getElementById('addWishForm').classList.add('open');document.getElementById('wi-title').focus()}
+function closeAddWish(){document.getElementById('addWishForm').classList.remove('open')}
+
+function filterWishes(el,cat){
+  wishFilter=cat;
+  document.querySelectorAll('#wishTabs .tab-btn').forEach(t=>t.classList.remove('on'));
   el.classList.add('on');
   renderWishes();
 }
 
-function openAddWish() {
-  goTo(document.querySelector('[onclick*=wishes]'), 'wishes');
-  document.getElementById('addForm').classList.add('open');
-}
-function closeAddWish() { document.getElementById('addForm').classList.remove('open'); }
-
-function saveWish() {
-  const t = document.getElementById('wt').value.trim();
-  if (!t) return;
-  wishes.unshift({ title:t, cat:document.getElementById('wc').value, pri:document.getElementById('wp').value, price:document.getElementById('wpr').value.trim(), link:document.getElementById('wlk').value.trim() });
-  document.getElementById('wt').value = '';
-  document.getElementById('wpr').value = '';
-  document.getElementById('wlk').value = '';
+function saveWish(){
+  const t=document.getElementById('wi-title').value.trim();
+  if(!t){toast('Please enter a wish title');return}
+  wishes.unshift({id:uid(),title:t,cat:document.getElementById('wi-cat').value,pri:document.getElementById('wi-pri').value,price:document.getElementById('wi-price').value.trim(),link:document.getElementById('wi-link').value.trim(),notes:document.getElementById('wi-notes').value.trim()});
+  ['wi-title','wi-price','wi-link','wi-notes'].forEach(id=>document.getElementById(id).value='');
   closeAddWish();
-  wFilter = 'all';
-  document.querySelectorAll('#wTabs .tab').forEach((t,i) => t.classList.toggle('on', i===0));
+  wishFilter='all';
+  document.querySelectorAll('#wishTabs .tab-btn').forEach((b,i)=>b.classList.toggle('on',i===0));
   renderWishes();
+  renderDash();
+  document.getElementById('ds-wishes').textContent=wishes.length;
+  toast('Wish added ✓');
 }
 
-function toggleG(el) {
-  el.classList.toggle('done');
-  const row = el.closest('.gift-row');
-  const name = row.querySelector('div[style*="font-size:13px"]');
-  if (el.classList.contains('done')) {
-    el.textContent = '✓';
-    name.style.textDecoration = 'line-through';
-    name.style.color = 'var(--text-muted)';
-  } else {
-    el.textContent = '';
-    name.style.textDecoration = 'none';
-    name.style.color = 'var(--text)';
+function deleteWish(id){
+  if(!confirm('Remove this wish?'))return;
+  wishes=wishes.filter(w=>w.id!==id);
+  renderWishes();renderDash();
+  document.getElementById('ds-wishes').textContent=wishes.length;
+  toast('Wish removed');
+}
+
+function renderWishes(){
+  const list=wishFilter==='all'?wishes:wishes.filter(w=>w.cat===wishFilter);
+  const el=document.getElementById('wishList');
+  if(!list.length){el.innerHTML='<div style="padding:2rem;text-align:center;color:var(--ink3);font-style:italic">No wishes in this category yet. Add one above!</div>';return}
+  el.innerHTML=list.map(w=>`
+    <div class="row">
+      <div class="row-icon" style="background:${WISH_BG[w.cat]||'#eee'}">${WISH_ICON[w.cat]||'🎁'}</div>
+      <div class="row-meta">
+        <div class="row-title">${w.title}</div>
+        <div class="row-sub">${w.cat}${w.price?' · '+w.price:''}${w.link?' · <a href="https://'+w.link+'" target="_blank" style="color:var(--purple)">'+w.link+'</a>':''}</div>
+        ${w.notes?`<div class="row-sub" style="margin-top:2px;font-style:italic">${w.notes}</div>`:''}
+      </div>
+      <span class="badge ${WISH_BADGE[w.cat]||'bg'}" style="font-size:10px;margin-right:6px">${w.cat.split(' ')[0]}</span>
+      <div class="pdot ${w.pri==='h'?'ph':w.pri==='m'?'pm':'pl'}"></div>
+      <button class="del-btn" onclick="deleteWish('${w.id}')" title="Remove">✕</button>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════
+// EVENTS
+// ══════════════════════════════════════════════
+function openAddEvent(){
+  document.getElementById('ev-id').value='';
+  document.getElementById('eventModalTitle').textContent='New event board';
+  ['ev-name','ev-date','ev-theme','ev-venue','ev-colors','ev-food','ev-ent','ev-cake','ev-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ev-guests').value='';
+  document.getElementById('ev-prog').value=0;
+  document.getElementById('ev-prog-label').textContent='0';
+  openModal('addEventOverlay');
+}
+
+function saveEvent(){
+  const name=document.getElementById('ev-name').value.trim();
+  if(!name){toast('Please enter an event name');return}
+  const id=document.getElementById('ev-id').value;
+  const ev={
+    id:id||uid(),name,type:document.getElementById('ev-type').value,
+    date:document.getElementById('ev-date').value,
+    theme:document.getElementById('ev-theme').value,
+    venue:document.getElementById('ev-venue').value,
+    guests:parseInt(document.getElementById('ev-guests').value)||0,
+    colors:document.getElementById('ev-colors').value,
+    food:document.getElementById('ev-food').value,
+    ent:document.getElementById('ev-ent').value,
+    cake:document.getElementById('ev-cake').value,
+    notes:document.getElementById('ev-notes').value,
+    prog:parseInt(document.getElementById('ev-prog').value)||0,
+  };
+  if(id){events=events.map(e=>e.id===id?ev:e)}else{events.unshift(ev)}
+  closeModal('addEventOverlay');
+  renderEvents();renderDash();
+  toast(id?'Event updated ✓':'Event board created ✓');
+}
+
+function viewEvent(id){
+  const ev=events.find(e=>e.id===id);
+  if(!ev)return;
+  currentEventId=id;
+  document.getElementById('ve-title').textContent=EVENT_EMOJI[ev.type]+' '+ev.name;
+  const vboard=[
+    {icon:'🏛️',label:'Venue',val:ev.venue},
+    {icon:'🎨',label:'Theme',val:ev.theme},
+    {icon:'👥',label:'Guests',val:ev.guests?ev.guests+' guests':''},
+    {icon:'🌈',label:'Colors',val:ev.colors},
+    {icon:'🍽️',label:'Food',val:ev.food},
+    {icon:'🎵',label:'Entertainment',val:ev.ent},
+    {icon:'🎂',label:'Cake',val:ev.cake},
+    {icon:'📝',label:'Notes',val:ev.notes},
+  ].filter(i=>i.val);
+  document.getElementById('viewEventBody').innerHTML=`
+    <div style="background:var(--berry);border-radius:12px;padding:1.1rem;margin-bottom:1rem;color:#fff">
+      <div style="font-size:11px;opacity:.7;margin-bottom:3px">${ev.date||'Date TBD'} ${ev.guests?'· '+ev.guests+' guests':''}</div>
+      <div style="font-size:17px;font-weight:600;margin-bottom:.65rem">${ev.theme||'No theme set yet'}</div>
+      <div style="background:rgba(255,255,255,0.2);border-radius:4px;height:6px"><div style="background:#fff;border-radius:4px;height:6px;width:${ev.prog}%;transition:width .5s"></div></div>
+      <div style="font-size:11px;opacity:.7;margin-top:.3rem">${ev.prog}% planned</div>
+    </div>
+    <div class="vgrid">${vboard.map(i=>`<div class="vcard"><div class="vcard-icon">${i.icon}</div><div class="vcard-label">${i.label}</div><div class="vcard-val">${i.val}</div></div>`).join('')}</div>
+    ${!vboard.length?'<div style="text-align:center;padding:1.5rem;color:var(--ink3);font-style:italic">Click Edit to fill in your vision board details</div>':''}
+  `;
+  openModal('viewEventOverlay');
+}
+
+function editCurrentEvent(){
+  closeModal('viewEventOverlay');
+  const ev=events.find(e=>e.id===currentEventId);
+  if(!ev)return;
+  document.getElementById('ev-id').value=ev.id;
+  document.getElementById('eventModalTitle').textContent='Edit event board';
+  document.getElementById('ev-name').value=ev.name;
+  document.getElementById('ev-type').value=ev.type;
+  document.getElementById('ev-date').value=ev.date;
+  document.getElementById('ev-theme').value=ev.theme||'';
+  document.getElementById('ev-venue').value=ev.venue||'';
+  document.getElementById('ev-guests').value=ev.guests||'';
+  document.getElementById('ev-colors').value=ev.colors||'';
+  document.getElementById('ev-food').value=ev.food||'';
+  document.getElementById('ev-ent').value=ev.ent||'';
+  document.getElementById('ev-cake').value=ev.cake||'';
+  document.getElementById('ev-notes').value=ev.notes||'';
+  document.getElementById('ev-prog').value=ev.prog||0;
+  document.getElementById('ev-prog-label').textContent=ev.prog||0;
+  openModal('addEventOverlay');
+}
+
+function deleteCurrentEvent(){
+  if(!confirm('Delete this event board?'))return;
+  events=events.filter(e=>e.id!==currentEventId);
+  closeModal('viewEventOverlay');renderEvents();renderDash();
+  toast('Event deleted');
+}
+
+function renderEvents(){
+  const el=document.getElementById('events-grid');
+  let html='<div class="g2">';
+  events.forEach(ev=>{
+    const pColor=ev.prog>70?'var(--teal)':ev.prog>30?'var(--gold)':'var(--rose)';
+    html+=`<div class="event-card" onclick="viewEvent('${ev.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.6rem">
+        <div style="font-size:15px;font-weight:600">${EVENT_EMOJI[ev.type]} ${ev.name}</div>
+        <span class="badge bg" style="font-size:10px;flex-shrink:0;margin-left:.5rem">${ev.date||'TBD'}</span>
+      </div>
+      ${ev.theme?`<div style="font-size:12px;color:var(--ink3);margin-bottom:.5rem;font-style:italic">${ev.theme}</div>`:''}
+      <div style="display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.75rem">
+        ${ev.guests?`<span class="badge bg" style="font-size:10px">👥 ${ev.guests} guests</span>`:''}
+        ${ev.venue?`<span class="badge bg" style="font-size:10px">📍 ${ev.venue.split(' ').slice(0,3).join(' ')}</span>`:''}
+      </div>
+      <div class="prog-bg"><div class="prog-fill" style="width:${ev.prog}%;background:${pColor}"></div></div>
+      <div class="prog-row"><span class="prog-label">${ev.prog}% planned</span><span style="font-size:11px;color:var(--ink3)">Click to view board →</span></div>
+    </div>`;
+  });
+  html+=`<div class="dashed-card" onclick="openAddEvent()">
+    <div><div class="dashed-icon">✚</div><div class="dashed-label">Create new event board</div><div class="dashed-sub">Birthday · Anniversary · Eid · Mother's Day</div></div>
+  </div></div>`;
+  el.innerHTML=html;
+}
+
+// ══════════════════════════════════════════════
+// MEMORIES
+// ══════════════════════════════════════════════
+function openAddMemory(){
+  document.getElementById('mem-id').value='';
+  document.getElementById('memModalTitle').textContent='Add to memory vault';
+  ['mem-title','mem-content','mem-unlock'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mem-type').value='photo';
+  document.getElementById('mem-private').value='no';
+  document.getElementById('mem-unlock-field').style.display='none';
+  openModal('addMemoryOverlay');
+}
+
+document.addEventListener('change',function(e){
+  if(e.target.id==='mem-type'){
+    document.getElementById('mem-unlock-field').style.display=e.target.value==='letter'?'block':'none';
   }
+});
+
+function saveMemory(){
+  const title=document.getElementById('mem-title').value.trim();
+  if(!title){toast('Please enter a title');return}
+  const id=document.getElementById('mem-id').value;
+  const mem={id:id||uid(),title,type:document.getElementById('mem-type').value,content:document.getElementById('mem-content').value,priv:document.getElementById('mem-private').value==='yes',unlock:document.getElementById('mem-unlock').value};
+  if(id){memories=memories.map(m=>m.id===id?mem:m)}else{memories.unshift(mem)}
+  closeModal('addMemoryOverlay');renderMemories();
+  toast(id?'Memory updated ✓':'Memory saved ✓');
 }
 
-function goTo(el, id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  if (el) el.classList.add('active');
-  if (id === 'wishes') renderWishes();
-  window.scrollTo(0, 0);
+function viewMemory(id){
+  const m=memories.find(x=>x.id===id);
+  if(!m)return;
+  currentMemoryId=id;
+  document.getElementById('vm-title').textContent=MEM_ICON[m.type]+' '+m.title;
+  document.getElementById('viewMemoryBody').innerHTML=`
+    <div style="display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap">
+      <span class="badge bg">${MEM_ICON[m.type]} ${m.type.charAt(0).toUpperCase()+m.type.slice(1)}</span>
+      ${m.priv?'<span class="badge bpk">🔒 Private</span>':'<span class="badge bt">Shared with family</span>'}
+      ${m.unlock?`<span class="badge bp">⏰ Unlocks ${m.unlock}</span>`:''}
+    </div>
+    ${m.content?`<div style="font-size:14px;color:var(--ink2);line-height:1.75;white-space:pre-wrap;background:var(--cream2);padding:1rem;border-radius:var(--rs)">${m.content}</div>`:'<div style="color:var(--ink3);font-style:italic">No content added yet. Click Edit to add content.</div>'}
+  `;
+  openModal('viewMemoryOverlay');
 }
 
-renderWishes();
+function editCurrentMemory(){
+  closeModal('viewMemoryOverlay');
+  const m=memories.find(x=>x.id===currentMemoryId);
+  if(!m)return;
+  document.getElementById('mem-id').value=m.id;
+  document.getElementById('memModalTitle').textContent='Edit memory';
+  document.getElementById('mem-title').value=m.title;
+  document.getElementById('mem-type').value=m.type;
+  document.getElementById('mem-content').value=m.content||'';
+  document.getElementById('mem-private').value=m.priv?'yes':'no';
+  document.getElementById('mem-unlock').value=m.unlock||'';
+  document.getElementById('mem-unlock-field').style.display=m.type==='letter'?'block':'none';
+  openModal('addMemoryOverlay');
+}
+
+function deleteCurrentMemory(){
+  if(!confirm('Delete this memory?'))return;
+  memories=memories.filter(m=>m.id!==currentMemoryId);
+  closeModal('viewMemoryOverlay');renderMemories();
+  toast('Memory deleted');
+}
+
+function filterMemories(el,type){
+  memFilter=type;
+  document.querySelectorAll('#memTabs .tab-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  renderMemories();
+}
+
+function renderMemories(){
+  const list=memFilter==='all'?memories:memories.filter(m=>m.type===memFilter);
+  const el=document.getElementById('memoriesGrid');
+  let html=list.map(m=>`
+    <div class="mcard" onclick="viewMemory('${m.id}')">
+      <div class="mcard-icon" style="background:${MEM_BG[m.type]||'#eee'}">${MEM_ICON[m.type]}</div>
+      <div class="mcard-title">${m.title}</div>
+      <div class="mcard-sub">${m.type.charAt(0).toUpperCase()+m.type.slice(1)}</div>
+      <div style="margin-top:.5rem;display:flex;gap:.3rem;flex-wrap:wrap">
+        ${m.priv?'<span class="badge bpk" style="font-size:10px">🔒 Private</span>':''}
+        ${m.unlock?'<span class="badge bp" style="font-size:10px">⏰ Time-locked</span>':''}
+      </div>
+    </div>`).join('');
+  html+=`<div class="dashed-card" onclick="openAddMemory()" style="min-height:130px">
+    <div><div class="dashed-icon" style="font-size:20px">✚</div><div class="dashed-label">Add memory</div></div>
+  </div>`;
+  el.innerHTML=html;
+}
+
+// ══════════════════════════════════════════════
+// FAMILY
+// ══════════════════════════════════════════════
+function openAddFamily(){openModal('addFamilyOverlay')}
+
+function saveFamilyMember(){
+  const name=document.getElementById('fm-name').value.trim();
+  const email=document.getElementById('fm-email').value.trim();
+  if(!name||!email){toast('Please enter name and email');return}
+  family.push({id:uid(),name,email,role:document.getElementById('fm-role').value,access:document.getElementById('fm-access').value});
+  ['fm-name','fm-email'].forEach(id=>document.getElementById(id).value='');
+  closeModal('addFamilyOverlay');renderFamily();
+  document.getElementById('ds-family').textContent=family.length;
+  document.getElementById('giftBadge').textContent=gifts.filter(g=>g.done).length;
+  toast('Invite sent to '+name+' ✓');
+}
+
+function removeFamilyMember(id){
+  if(!confirm('Remove this family member?'))return;
+  family=family.filter(f=>f.id!==id);
+  renderFamily();
+  document.getElementById('ds-family').textContent=family.length;
+  toast('Member removed');
+}
+
+function renderFamily(){
+  const el=document.getElementById('familyList');
+  if(!family.length){el.innerHTML='<div style="padding:1.5rem;text-align:center;color:var(--ink3);font-style:italic">No family members yet. Invite someone!</div>';return}
+  const colors=['#FBEAF0','#E0F5EE','#EEEDFE','#FAEEDA','#FAECE7','#F1EFE8'];
+  const tc=['#72243E','#0D6649','#3C3489','#7A5C1E','#712B13','#5F5E5A'];
+  el.innerHTML=family.map((f,i)=>`
+    <div class="frow">
+      <div class="favatar" style="background:${colors[i%6]};color:${tc[i%6]}">${f.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:500;color:var(--ink)">${f.name}</div>
+        <div style="font-size:11px;color:var(--ink3)">${ROLE_LABEL[f.role]} · ${f.email}</div>
+      </div>
+      <span class="badge ${ACCESS_BADGE[f.access]||'bg'}" style="font-size:10px;white-space:nowrap">${ACCESS_LABEL[f.access]||f.access}</span>
+      <button class="del-btn" onclick="removeFamilyMember('${f.id}')" title="Remove">✕</button>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════
+// GIFTS
+// ══════════════════════════════════════════════
+function toggleGift(id){
+  const g=gifts.find(x=>x.id===id);
+  if(!g)return;
+  g.done=!g.done;
+  if(!g.done)g.by='';
+  renderGifts();
+  document.getElementById('ds-reserved').textContent=gifts.filter(x=>x.done).length;
+  document.getElementById('giftBadge').textContent=gifts.filter(x=>!x.done).length;
+  toast(g.done?'Reserved ✓':'Reservation cancelled');
+}
+
+function renderGifts(){
+  const reserved=gifts.filter(g=>g.done).length;
+  const total=gifts.length;
+  const totalPrice=gifts.filter(g=>g.price&&g.price!=='Any amount').reduce((a,g)=>{const n=parseFloat(g.price.replace(/[$,+]/g,''));return a+(isNaN(n)?0:n)},0);
+  const resPrc=gifts.filter(g=>g.done&&g.price&&g.price!=='Any amount').reduce((a,g)=>{const n=parseFloat(g.price.replace(/[$,+]/g,''));return a+(isNaN(n)?0:n)},0);
+  document.getElementById('giftStats').innerHTML=`
+    <div class="stat"><div class="stat-n">${total}</div><div class="stat-l">Total wishes</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--teal)">${reserved}</div><div class="stat-l">Reserved</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--ink3)">${total-reserved}</div><div class="stat-l">Available</div></div>`;
+  document.getElementById('giftList').innerHTML=gifts.map(g=>`
+    <div class="grow">
+      <div class="gcheck ${g.done?'done':''}" onclick="toggleGift('${g.id}')">${g.done?'✓':''}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:500;color:${g.done?'var(--ink3)':'var(--ink)'};text-decoration:${g.done?'line-through':'none'}">${g.title}</div>
+        ${g.done&&g.by?`<div style="font-size:11px;color:var(--teal);margin-top:2px">Reserved by ${g.by}</div>`:'<div style="font-size:11px;color:var(--ink3);margin-top:2px">${g.price||''}</div>'}
+      </div>
+      <div style="font-size:12px;color:var(--ink3);margin-right:.5rem">${g.price}</div>
+      ${g.done?`<span class="badge bt" style="font-size:10px">Reserved</span>`:`<button class="btn btn-sm btn-primary" onclick="reserveGift('${g.id}')">Reserve</button>`}
+    </div>`).join('');
+  document.getElementById('giftSummary').innerHTML=`
+    <div style="font-size:12px;color:var(--ink3)">${reserved} of ${total} gifts reserved</div>
+    <div style="font-size:12px;font-weight:500;color:var(--ink)">$${Math.round(resPrc).toLocaleString()} reserved of $${Math.round(totalPrice).toLocaleString()} total</div>`;
+}
+
+function reserveGift(id){
+  const by=prompt('Your name (so family can coordinate):');
+  if(!by)return;
+  const g=gifts.find(x=>x.id===id);
+  if(!g)return;
+  g.done=true; g.by=by;
+  renderGifts();
+  document.getElementById('ds-reserved').textContent=gifts.filter(x=>x.done).length;
+  toast('Gift reserved by '+by+' ✓');
+}
+
+// ══════════════════════════════════════════════
+// REMINDERS
+// ══════════════════════════════════════════════
+function openAddReminder(){openModal('addReminderOverlay')}
+
+function saveReminder(){
+  const name=document.getElementById('rem-name').value.trim();
+  const date=document.getElementById('rem-date').value;
+  if(!name||!date){toast('Please enter a name and date');return}
+  reminders.push({id:uid(),name,date,type:document.getElementById('rem-type').value,on:true});
+  reminders.sort((a,b)=>a.date.localeCompare(b.date));
+  closeModal('addReminderOverlay');
+  document.getElementById('rem-name').value='';
+  document.getElementById('rem-date').value='';
+  renderReminders();
+  toast('Reminder added ✓');
+}
+
+function deleteReminder(id){
+  reminders=reminders.filter(r=>r.id!==id);
+  renderReminders();toast('Reminder removed');
+}
+
+function toggleReminder(id){
+  const r=reminders.find(x=>x.id===id);
+  if(r)r.on=!r.on;
+  renderReminders();
+}
+
+function renderReminders(){
+  const MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const el=document.getElementById('reminderList');
+  if(!reminders.length){el.innerHTML='<div style="padding:1.5rem;text-align:center;color:var(--ink3);font-style:italic">No reminders yet. Add one to keep your family on track!</div>';return}
+  el.innerHTML=reminders.map(r=>{
+    const d=r.date?new Date(r.date+'T12:00:00'):null;
+    const days=d?Math.ceil((d-new Date())/(1000*60*60*24)):null;
+    return `<div class="remrow">
+      ${d?`<div class="remdate"><div class="remmo">${MO[d.getMonth()]}</div><div class="remday">${d.getDate()}</div></div>`:'<div class="remdate" style="background:var(--cream2)">📅</div>'}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:500;color:var(--ink)">${r.name}</div>
+        <div style="font-size:11px;color:${days!==null&&days<=7?'var(--rose)':'var(--ink3)'};margin-top:2px">${days!==null?(days>0?days+' days away':'Today!'):''}</div>
+      </div>
+      <button class="toggle ${r.on?'on':''}" onclick="toggleReminder('${r.id}')" aria-label="Toggle reminder"></button>
+      <button class="del-btn" onclick="deleteReminder('${r.id}')" title="Remove">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// AI CHIPS
+// ══════════════════════════════════════════════
+function sendPrompt(text){
+  window.open('https://claude.ai/new?q='+encodeURIComponent(text),'_blank');
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+renderDash();
 </script>
 </body>
 </html>
