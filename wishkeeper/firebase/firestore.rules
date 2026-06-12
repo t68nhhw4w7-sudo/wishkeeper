@@ -1,0 +1,115 @@
+// firebase/firestore.rules
+// WishKeeper — Firestore Security Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helper functions ────────────────────────────────────────────────────
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    // Check if caller is an accepted family member for a given profile owner
+    function isFamilyMember(ownerUid) {
+      return isAuthenticated() &&
+        exists(/databases/$(database)/documents/familyMembers/$(ownerUid + '_' + request.auth.uid)) ||
+        exists(
+          /databases/$(database)/documents/familyMembers/
+        );
+        // Note: In production use a cloud function to verify family access
+        // rather than direct Firestore rule lookup for better performance
+    }
+
+    // ─── Users ───────────────────────────────────────────────────────────────
+
+    match /users/{uid} {
+      allow read: if isAuthenticated();   // family needs name/photo
+      allow write: if isOwner(uid);
+    }
+
+    // ─── Wishes ──────────────────────────────────────────────────────────────
+
+    match /wishes/{wishId} {
+      // Owner can read all their wishes (including private)
+      allow read: if isAuthenticated() && (
+        isOwner(resource.data.ownerUid) ||
+        // Family: only non-private wishes
+        (resource.data.isPrivate == false)
+      );
+      allow create: if isAuthenticated() && isOwner(request.resource.data.ownerUid);
+      allow update: if isAuthenticated() && (
+        isOwner(resource.data.ownerUid) ||
+        // Family members can update reservedBy / isPurchased only
+        (request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['reservedBy', 'reservedByName', 'isPurchased', 'updatedAt']))
+      );
+      allow delete: if isAuthenticated() && isOwner(resource.data.ownerUid);
+    }
+
+    // ─── Events ──────────────────────────────────────────────────────────────
+
+    match /events/{eventId} {
+      allow read: if isAuthenticated() && (
+        isOwner(resource.data.ownerUid) ||
+        resource.data.isPrivate == false
+      );
+      allow create: if isAuthenticated() && isOwner(request.resource.data.ownerUid);
+      allow update, delete: if isAuthenticated() && isOwner(resource.data.ownerUid);
+    }
+
+    // ─── Family Members ───────────────────────────────────────────────────────
+
+    match /familyMembers/{memberId} {
+      // Owner can see / manage all their invites
+      allow read, write: if isAuthenticated() && (
+        isOwner(resource.data.ownerUid) ||
+        // Invited person can accept their own invite
+        (resource.data.email == request.auth.token.email &&
+         request.resource.data.diff(resource.data).affectedKeys()
+           .hasOnly(['inviteStatus', 'memberUid']))
+      );
+      allow create: if isAuthenticated() && isOwner(request.resource.data.ownerUid);
+      allow delete: if isAuthenticated() && isOwner(resource.data.ownerUid);
+    }
+
+    // ─── Gift Reservations ────────────────────────────────────────────────────
+    // The RECIPIENT (owner) must NOT be able to read these — hidden by design.
+    // Only family members and the reserver can see them.
+
+    match /giftReservations/{resId} {
+      // Family can read reservations for events they have access to
+      // Owner explicitly cannot see their own gift reservations (surprise!)
+      allow read: if isAuthenticated() &&
+        request.auth.uid != resource.data.ownerUid;
+      allow create: if isAuthenticated() &&
+        request.auth.uid == request.resource.data.reservedByUid &&
+        request.auth.uid != request.resource.data.ownerUid;
+      allow update, delete: if isAuthenticated() &&
+        request.auth.uid == resource.data.reservedByUid;
+    }
+
+    // ─── Memories ─────────────────────────────────────────────────────────────
+
+    match /memories/{memoryId} {
+      allow read: if isAuthenticated() && (
+        isOwner(resource.data.ownerUid) ||
+        resource.data.isPrivate == false
+      );
+      allow create: if isAuthenticated() && isOwner(request.resource.data.ownerUid);
+      allow update, delete: if isAuthenticated() && isOwner(resource.data.ownerUid);
+    }
+
+    // ─── Reminders ────────────────────────────────────────────────────────────
+
+    match /reminders/{reminderId} {
+      allow read, write: if isAuthenticated() && isOwner(resource.data.ownerUid);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.ownerUid);
+    }
+  }
+}
